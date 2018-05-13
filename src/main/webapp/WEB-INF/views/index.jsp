@@ -10,9 +10,11 @@
 </head>
 <body>
 <c:set var="contextPath" value="${pageContext.request.contextPath}"/>
+	<h1>Welcome on main page of new Twitter application.</h1>
+	
+	
 	<h2>Navigation panel</h2>
-	<a href="${contextPath}/getBookList"><button>List of all books</button> </a><br>
-	<a href="${contextPath}/getAllAuthors"><button>List of all authors</button> </a><br>
-	<a href="${contextPath}/getAllPublishers"><button>List of all publishers</button> </a><br>
+	<a href="${contextPath}/login"><button>Login</button> </a><br>
+	<a href="${contextPath}/user/register-user"><button>Register</button> </a><br>
 </body>
 </html>

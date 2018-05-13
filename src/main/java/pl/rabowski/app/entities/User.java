@@ -13,6 +13,7 @@ import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.mindrot.jbcrypt.BCrypt;
@@ -42,13 +43,25 @@ public class User {
 
 	@Email
 	@NotEmpty
-	@UniqueEmail //stworzyc jakos validacje na Unique
+//	@UniqueEmail //stworzyc jakos validacje na Unique - powoduje 500 null pointer.. 
 	@Column(unique = true)
 	private String email; 
 
 	@CreationTimestamp
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date created;
+	
+	@UpdateTimestamp
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date updated;
+
+	public Date getUpdated() {
+		return updated;
+	}
+
+	public void setUpdated(Date updated) {
+		this.updated = updated;
+	}
 
 	public Long getId() {
 		return id;

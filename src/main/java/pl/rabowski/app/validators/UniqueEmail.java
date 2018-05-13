@@ -8,10 +8,13 @@ import java.lang.annotation.Target;
 import javax.validation.Constraint;
 import javax.validation.Payload;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
 
 @Constraint(validatedBy = UniqueEmailValidator.class)
 @Target({ ElementType.METHOD, ElementType.FIELD })
 @Retention(RetentionPolicy.RUNTIME)
+@NotEmpty
 public @interface UniqueEmail {
 	
 	String message() default "{uniqueEmail.error.message}";

@@ -16,7 +16,7 @@ public class HomePageController {
 	@GetMapping(value = {"/login"})
 	public ModelAndView loginPage() {
 		ModelAndView mav = new ModelAndView();
-		mav.setViewName("login");
+		mav.setViewName("form/login");
 		return mav;
 	}
 }
