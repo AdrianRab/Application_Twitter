@@ -19,4 +19,11 @@ public class HomePageController {
 		mav.setViewName("form/login");
 		return mav;
 	}
+	
+	@GetMapping(value = {"/confirmation/{id}"})
+	public ModelAndView confirmationPage() {
+		ModelAndView mav = new ModelAndView();
+		mav.setViewName("confirmation");
+		return mav;
+	}
 }

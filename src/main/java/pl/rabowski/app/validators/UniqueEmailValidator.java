@@ -25,13 +25,16 @@ public class UniqueEmailValidator implements ConstraintValidator<UniqueEmail, St
 	public boolean isValid(String email, ConstraintValidatorContext context) {
 		List<User> allUsers = userRepository.findAll();
 		List<String> emails = new ArrayList<>();
+		 if (email == null)
+	            return true;
+		
 		if (allUsers.isEmpty()) {
 			return true;
 		} else {
 			for (User user : allUsers) {
 				emails.add(user.getEmail());
 			}
-			return emails.contains(email);
+			return !(emails.contains(email));
 		}
 
 	}

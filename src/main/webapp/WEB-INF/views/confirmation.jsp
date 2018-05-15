@@ -31,7 +31,7 @@
 	</table>
 	
 	<a href="${contextPath}/user/edit-user/${user.id}"><button>Edit profile.</button></a><br>
-	
+	<a href="${contextPath}/tweet/new"><button>Add new tweet.</button></a><br>
 	<a href="${contextPath}/"><button>Go to main page.</button></a> 
 
 </body>

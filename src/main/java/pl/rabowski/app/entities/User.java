@@ -1,12 +1,17 @@
 package pl.rabowski.app.entities;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -17,9 +22,6 @@ import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.mindrot.jbcrypt.BCrypt;
-
-import pl.rabowski.app.validators.UniqueEmail;
-
 
 @Entity
 @Table(name = "users")
@@ -43,17 +45,21 @@ public class User {
 
 	@Email
 	@NotEmpty
-//	@UniqueEmail //stworzyc jakos validacje na Unique - powoduje 500 null pointer.. 
+	// @UniqueEmail //stworzyc jakos validacje na Unique - powoduje 500 null
+	// pointer..
 	@Column(unique = true)
-	private String email; 
+	private String email;
 
 	@CreationTimestamp
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date created;
-	
+
 	@UpdateTimestamp
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date updated;
+
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private List<Tweet> tweets = new ArrayList<>();
 
 	public Date getUpdated() {
 		return updated;
@@ -84,7 +90,8 @@ public class User {
 	}
 
 	public void setPassword(String password) {
-		this.password = BCrypt.hashpw(password, BCrypt.gensalt());;
+		this.password = BCrypt.hashpw(password, BCrypt.gensalt());
+		;
 	}
 
 	public boolean isEnabled() {
@@ -109,5 +116,13 @@ public class User {
 
 	public void setCreated(Date created) {
 		this.created = created;
+	}
+
+	public List<Tweet> getTweets() {
+		return tweets;
+	}
+
+	public void setTweets(List<Tweet> tweets) {
+		this.tweets = tweets;
 	}
 }
