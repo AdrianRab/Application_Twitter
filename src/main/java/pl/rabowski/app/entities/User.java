@@ -15,6 +15,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.CreationTimestamp;
@@ -39,14 +40,15 @@ public class User {
 
 	@NotEmpty
 	private String password;
+	
+	@Transient
+	private String passwordConfirmed;
 
 	@NotNull
 	private boolean enabled;
 
 	@Email
 	@NotEmpty
-	// @UniqueEmail //stworzyc jakos validacje na Unique - powoduje 500 null
-	// pointer..
 	@Column(unique = true)
 	private String email;
 
@@ -124,5 +126,13 @@ public class User {
 
 	public void setTweets(List<Tweet> tweets) {
 		this.tweets = tweets;
+	}
+	
+	public String getPasswordConfirmed() {
+		return passwordConfirmed;
+	}
+
+	public void setPasswordConfirmed(String passwordConfirmed) {
+		this.passwordConfirmed = passwordConfirmed;
 	}
 }

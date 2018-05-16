@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Confirmation</title>
+<title>User profile</title>
 </head>
 <body>
 
@@ -30,8 +30,26 @@
 		</tr>
 	</table>
 	
+	
+	<h3>All tweets:</h3>
+	
+	<table>
+		<tr>
+			<th>Posted</th>
+			<th>Content</th>
+			<th>Details</th>
+		</tr>
+		<c:forEach var="tweet" items="${user.tweets}">
+			<tr>
+				<td>${tweet.created}</td>
+				<td>${tweet.text}</td>
+				<td><a href="${contextPath}/tweet/details/${tweet.id}"><button>Details</button></a><br></td>
+			</tr>
+		</c:forEach>
+	</table>
+	
 	<a href="${contextPath}/user/edit-user/${user.id}"><button>Edit profile.</button></a><br>
-	<a href="${contextPath}/tweet/new"><button>Add new tweet.</button></a><br>
+	<a href="${contextPath}/tweet/add"><button>Add new tweet.</button></a><br>
 	<a href="${contextPath}/"><button>Go to main page.</button></a> 
 
 </body>

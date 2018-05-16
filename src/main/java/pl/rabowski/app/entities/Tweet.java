@@ -11,8 +11,10 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.validator.constraints.NotEmpty;
 
 @Entity
 @Table(name = "tweets")
@@ -26,9 +28,11 @@ public class Tweet {
 	private long id;
 	
 	@ManyToOne
+	@NotNull
 	private User user;
 
 	@Column(columnDefinition = "TEXT")
+	@NotEmpty
 	private String text;
 
 	@UpdateTimestamp

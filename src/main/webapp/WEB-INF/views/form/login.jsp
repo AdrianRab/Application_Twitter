@@ -11,23 +11,40 @@
 <body>
 	<c:set var="contextPath" value="${pageContext.request.contextPath}"/>
 	
-<!-- 	strona nie dziala -->
 	
 	<h2>Login</h2>
-	<form:form method="POST" modelAttribute="user">
 	
-		E-mail address: <form:input path="email"/><br>
-		<form:errors path="email" cssClass="error" element="div"/>
-			
-		Password: <form:password path="password"/><br>
-		<form:errors path="password" cssClass="error" element="div"/>
-		
-		<input type="submit" value="Login" />
-		<input type="reset" value="Reset the form" />
-	</form:form>
+	<c:if test="${errorMessage != null}">
+		<div><h3>Error</h3>
+			<p>${errorMessage}</p>
+		</div>
+	</c:if>
+	
+	<form method="POST" action="http://localhost:8080/Application_Twitter/login">
+		<table border=1>
+			<tr>
+				<th>Email:</th>
+				<td>
+					<input type="text" name="email">
+				</td>
+			</tr>
+			<tr>
+				<th>Password:</th>
+				<td>
+					<input type="password" name="password">
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2">
+					<input type="submit" name="submitButton" value="Log in">
+				</td>
+			</tr>
+		</table>
+	</form>
+	
 	<br>
-	Doesn't have account yet? 
-	<a href="${contextPath}/user/register-user"><button>Register</button></a> 
+	Don't have account yet? 
+	<a href="${contextPath}/user/register-user"><button>Register</button></a> <br>
 	
 	<a href="${contextPath}/"><button>Cancel</button></a> 
 </body>

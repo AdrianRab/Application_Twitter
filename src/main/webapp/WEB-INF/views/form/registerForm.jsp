@@ -12,6 +12,13 @@
 	<c:set var="contextPath" value="${pageContext.request.contextPath}"/>
 	
 	<h2>Registration form</h2>
+	
+	<c:if test="${errorMessage != null}">
+		<div><h3>Error</h3>
+			<p>${errorMessage}</p>
+		</div>
+	</c:if>
+	
 	<form:form method="POST" modelAttribute="user">
 		Username: <form:input path="username"/><br>
 		<form:errors path="username" cssClass="error" element="div"/>
@@ -22,7 +29,9 @@
 		Password: <form:password path="password"/><br>
 		<form:errors path="password" cssClass="error" element="div"/>
 		
-		
+		Confirm password: <form:password path="passwordConfirmed"/><br>
+		<form:errors path="passwordConfirmed" cssClass="error" element="div"/>
+				
 		<input type="submit" value="Register" />
 		<input type="reset" value="Reset the form" />
 	</form:form>

@@ -9,69 +9,90 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.servlet.ModelAndView;
 
 import pl.rabowski.app.entities.Tweet;
+import pl.rabowski.app.entities.User;
 import pl.rabowski.app.repositories.TweetRepository;
 
 @Controller
 @RequestMapping("/tweet")
 public class TweetController {
-	
+
 	@Autowired
 	private TweetRepository tweetRepository;
-	
+
 	@GetMapping("/add")
-	public ModelAndView addTweetForm() {
+	public ModelAndView addTweetForm(@SessionAttribute(name = "user", required = false) User user) {
 		ModelAndView mav = new ModelAndView();
-		mav.addObject("tweet", new Tweet());
-		mav.setViewName("form/tweetForm");
+		if(user == null) {
+			mav.setViewName("redirect:http://localhost:8080/Application_Twitter/login");
+			mav.addObject("errorMessage", "You need to be logged to add tweets.");
+			return mav;
+		}
+			mav.addObject("user", user);
+			mav.addObject("tweet", new Tweet());
+			mav.setViewName("form/tweetForm");
 		return mav;
 	}
 
 	@PostMapping("/add")
-	public ModelAndView addTweet(@Valid Tweet tweet, BindingResult result) {
+	public ModelAndView addTweet(@SessionAttribute(name = "user", required = false) User user, @Valid Tweet tweet,
+			BindingResult result) {
 		ModelAndView mav = new ModelAndView();
 		if (!result.hasErrors()) {
 			tweetRepository.saveAndFlush(tweet);
 			mav.addObject("tweet", tweet);
-			mav.setViewName("/confirmation");
+			mav.setViewName("redirect:http://localhost:8080/Application_Twitter/user/my-profile/" + user.getId());
 			return mav;
 		} else {
 			mav.setViewName("form/tweetForm");
 			return mav;
 		}
 	}
-	
+
 	@GetMapping("/edit/{id}")
-	public ModelAndView editTweetForm(@PathVariable long id) {
+	public ModelAndView editTweetForm(@PathVariable long id,
+			@SessionAttribute(name = "user", required = false) User user) {
 		ModelAndView mav = new ModelAndView();
 		Tweet tweet = tweetRepository.findOne(id);
+		mav.addObject("user", user);
 		mav.addObject("user", tweet);
 		mav.setViewName("form/tweetForm");
 		return mav;
 	}
-	
-	
+
 	@PostMapping("/edit/{id}")
-	public ModelAndView editTweet(@Valid Tweet tweet, BindingResult result) {
+	public ModelAndView editTweet(@SessionAttribute(name = "user", required = false) User user, @Valid Tweet tweet,
+			BindingResult result) {
 		ModelAndView mav = new ModelAndView();
 		if (!result.hasErrors()) {
 			tweetRepository.saveAndFlush(tweet);
-			mav.setViewName("redirect:http://localhost:8080/Application_Twitter/confirmation"); //dodac przekazanie w sciezce id usera tweetu
+			mav.setViewName("redirect:http://localhost:8080/Application_Twitter/user/my-profile/" + user.getId());
 			return mav;
 		} else {
 			mav.setViewName("form/tweetForm");
 			return mav;
 		}
 	}
-	
+
 	@GetMapping("/detele/{id}")
-	public ModelAndView removeTweet(@PathVariable long id) {
+	public ModelAndView removeTweet(@SessionAttribute(name = "user", required = false) User user,
+			@PathVariable long id) {
 		ModelAndView mav = new ModelAndView();
 		tweetRepository.delete(id);
-		mav.setViewName("redirect:http://localhost:8080/Application_Twitter/confirmation"); //dodac przekazanie w sciezce id usera tweetu
+		mav.setViewName("redirect:http://localhost:8080/Application_Twitter/user/my-profile/" + user.getId());
 		return mav;
 	}
 	
+	@GetMapping("/details/{id}")
+	public ModelAndView getDetails(@SessionAttribute(name = "user", required = false) User user, @PathVariable long id) {
+		ModelAndView mav = new ModelAndView();
+		mav.addObject("user", user);
+		mav.addObject("tweet", tweetRepository.findOne(id));
+		mav.setViewName("/tweetDetails");
+		return mav;
+	}
+
 }
