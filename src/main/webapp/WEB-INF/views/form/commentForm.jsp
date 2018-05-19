@@ -6,17 +6,17 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Add new tweet</title>
+<title>Add comment</title>
 </head>
 <body>
-	
 	<c:set var="contextPath" value="${pageContext.request.contextPath}"/>
 	
-	<h3>Post tweet</h3>
+	<h3>Post a comment</h3>
 	<br>
-	<form:form method="POST" modelAttribute="tweet">
-		Username: <form:input path="username" value="${user.username}"/><br>
-		<form:errors path="username" cssClass="error" element="div"/>
+	<form:form method="POST" modelAttribute="comment">
+	
+		<form:hidden path="user"/>
+		<form:hidden path="post"/>
 		
 		Content: <form:textarea path="text" rows="20" cols="40"/><br>
 		<form:errors path="text" cssClass="error" element="div"/>
@@ -25,7 +25,6 @@
 		<input type="reset" value="Clear" />
 	</form:form>
 	<br>
-	<a href="${contextPath}/home"><button>Main page</button></a> 
-
+	<a href="${contextPath}/home"><button>Main page</button></a>
 </body>
 </html>

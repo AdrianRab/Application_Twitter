@@ -1,18 +1,23 @@
 package pl.rabowski.app.controllers;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import pl.rabowski.app.entities.Message;
 import pl.rabowski.app.entities.User;
+import pl.rabowski.app.repositories.MessageRepository;
 import pl.rabowski.app.repositories.UserRepository;
 
 @Controller
@@ -22,8 +27,8 @@ public class UserController {
 	@Autowired
 	UserRepository userRepository;
 
-
-
+	@Autowired
+	MessageRepository messageRepository;
 	
 	@GetMapping("/register-user")
 	public ModelAndView addUserForm() {
@@ -51,9 +56,10 @@ public class UserController {
 		} else {
 			if (!result.hasErrors()) {
 				user.setEnabled(true);
+				user.setRole("ROLE_USER");
 				userRepository.saveAndFlush(user);
 				mav.addObject("user", user);
-				mav.setViewName("/userProfile");
+				mav.setViewName("redirect:http://localhost:8080/Application_Twitter/user/my-page/"+user.getId());
 				return mav;
 			} else {
 				mav.setViewName("form/registerForm");
@@ -100,4 +106,58 @@ public class UserController {
 		mav.setViewName("/userProfile");
 		return mav;
 	}
+	
+	@GetMapping("/messages/{id}")
+	public ModelAndView userMessages(@PathVariable long id) {
+		ModelAndView mav = new ModelAndView();
+		User user = userRepository.findOne(id);
+		List<Message>receivedMessages = user.getReceivedMessages();
+		List<Message>sentMessages = user.getSentMessages();
+		mav.addObject("user", user);
+		mav.addObject("receivedMessages", receivedMessages );
+		mav.addObject("sentMessages", sentMessages);
+		mav.setViewName("/messages");
+		return mav;
+	}
+	
+	@GetMapping("/delete/{id}")
+	public ModelAndView deleteMessage(@PathVariable long id) {
+		ModelAndView mav = new ModelAndView();
+		Message message = messageRepository.findOne(id);
+		long userID = message.getSender().getId();
+		messageRepository.delete(message);
+		mav.setViewName("redirect:http://localhost:8080/Application_Twitter/user/messages/"+userID);
+		return mav;
+	}
+	
+	@GetMapping("/sendMessage/{id}")
+	public ModelAndView sendMessageForm(@PathVariable long id) {
+		ModelAndView mav = new ModelAndView();
+		mav.addObject("user", userRepository.findOne(id));
+		mav.addObject("message", new Message());
+		mav.setViewName("form/sendMessage");
+		return mav;
+	}
+	
+	@PostMapping("/sendMessage/{id}")
+	public ModelAndView sendMessage(@RequestParam String password, @RequestParam String passwordConfirmed,  @Valid Message message, BindingResult result) {
+		ModelAndView mav = new ModelAndView();
+		if (!result.hasErrors()) {	
+			long userId = message.getSender().getId();
+			messageRepository.saveAndFlush(message);
+			mav.addObject("message", message);
+			mav.setViewName("redirect:http://localhost:8080/Application_Twitter/user/messages/"+userId);
+			return mav;
+		} else {
+			mav.setViewName("form/registerForm");
+			return mav;
+		}
+	}
+	
+	@ModelAttribute("allUsers")
+	public List<User> getAllTweets() {
+		List<User> users = userRepository.findAll();
+		return users;
+	}
+	
 }

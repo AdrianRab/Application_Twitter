@@ -40,13 +40,14 @@
 				</td>
 			</tr>
 		</table>
+		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 	</form>
 	
 	<br>
 	Don't have account yet? 
 	<a href="${contextPath}/user/register-user"><button>Register</button></a> <br>
 	
-	<a href="${contextPath}/"><button>Cancel</button></a> 
+	<a href="${contextPath}/home"><button>Cancel</button></a> 
 </body>
 
 </html>

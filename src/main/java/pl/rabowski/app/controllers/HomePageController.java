@@ -50,17 +50,20 @@ public class HomePageController {
 		User user = userRepository.findByEmailIgnoreCase(email);
 		if (user != null) {
 			if (BCrypt.checkpw(password, user.getPassword())) {
+				System.out.println("correct password");
 				user.setEnabled(true);
 				session.setAttribute("loggedUser", user);
 				mav.addObject("user", user);
 				mav.setViewName("userProfile");
 				return mav;
 			} else {
+				System.out.println("incorrect password");
 				mav.addObject("errorMessage", "Invalid password");
 				mav.setViewName("form/login");
 				return mav;
 			}
 		} else {
+			System.out.println("user searched by email is null");
 			mav.addObject("errorMessage", "Invalid username");
 			mav.setViewName("form/login");
 			return mav;
@@ -78,25 +81,25 @@ public class HomePageController {
 		return mav;
 	}
 
-	@PostMapping(value = { "/", "/home", "/twitter" })
-	public ModelAndView addTweet(@SessionAttribute(name = "user", required = false) User user, @Valid Tweet tweet,
-			BindingResult result) {
-		ModelAndView mav = new ModelAndView();
-		if (user == null) {
-			mav.setViewName("redirect:http://localhost:8080/Application_Twitter/login");
-			mav.addObject("errorMessage", "You need to be logged to add tweets.");
-			return mav;
-		}
-			if (!result.hasErrors()) {
-				tweetRepository.saveAndFlush(tweet);
-				mav.addObject("tweet", tweet);
-				mav.setViewName("redirect:http://localhost:8080/Application_Twitter/home");
-				return mav;
-			} else {
-				mav.setViewName("index");
-				return mav;
-			}
-		}
+//	@PostMapping(value = { "/", "/home", "/twitter" })
+//	public ModelAndView addTweet(@SessionAttribute(name = "user", required = false) User user, @Valid Tweet tweet,
+//			BindingResult result) {
+//		ModelAndView mav = new ModelAndView();
+//		if (user == null) {
+//			mav.setViewName("redirect:http://localhost:8080/Application_Twitter/login");
+//			mav.addObject("errorMessage", "You need to be logged to add tweets.");
+//			return mav;
+//		}
+//			if (!result.hasErrors()) {
+//				tweetRepository.saveAndFlush(tweet);
+//				mav.addObject("tweet", tweet);
+//				mav.setViewName("redirect:http://localhost:8080/Application_Twitter/home");
+//				return mav;
+//			} else {
+//				mav.setViewName("index");
+//				return mav;
+//			}
+//		}
 
 
 	@ModelAttribute("allTweets")

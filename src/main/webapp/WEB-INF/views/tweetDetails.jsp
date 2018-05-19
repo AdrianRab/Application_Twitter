@@ -30,11 +30,30 @@
 			<th>Content:</th>
 			<td>${tweet.text}</td>
 		</tr>
+	</table>
 	
+	<h3>Comments</h3>
+	<table>
+		<tr>
+			<th>Id</th>
+			<th>Posted by</th>
+			<th>Created</th>
+			<th>Text</th>
+			<th>Action</th>
+		</tr>
+		<tr>
+			<c:forEach items="${comments}" var="comment">
+				<td>${comment.id}</td>
+				<td>${comment.user.username}</td>	
+				<td>${comment.created}</td>
+				<td>${comment.text}</td>
+				<td><a href="${contextPath}/tweet/delete-comment/${comment.id}"><button>Delete</button></a><br></td>
+			</c:forEach>
+		</tr>
 	</table>
 	
 	<a href="${contextPath}/user/my-page/${user.id}"><button>Back to profile</button></a><br>
 	<a href="${contextPath}/tweet/edit/${tweet.id}"><button>Add new tweet.</button></a><br>
-	<a href="${contextPath}/"><button>Go to main page.</button></a> 
+	<a href="${contextPath}/home"><button>Go to main page.</button></a> 
 </body>
 </html>

@@ -8,8 +8,16 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>User profile</title>
 </head>
-<body>
-
+<body style="background-color: hsl(204, 8%, 95%)">
+	
+	<div  style="background-color: hsl(150, 100%, 65%)">
+		<%@ include file="header.jsp"%>
+	</div>
+	
+	<c:if test="${user.role == ADMIN_ROLE}">
+		<p>You are logged as admin.</p>
+	</c:if>
+	
 	<c:set var="contextPath" value="${pageContext.request.contextPath}"/>
 	<h2>Welcome ${user.username}!</h2>
 	<br>
@@ -47,10 +55,11 @@
 			</tr>
 		</c:forEach>
 	</table>
-	
+	<a href="${contextPath}/user/messages/${user.id}"><button>Messages</button></a>
 	<a href="${contextPath}/user/edit-user/${user.id}"><button>Edit profile.</button></a><br>
 	<a href="${contextPath}/tweet/add"><button>Add new tweet.</button></a><br>
-	<a href="${contextPath}/"><button>Go to main page.</button></a> 
-
+	<a href="${contextPath}/home"><button>Go to main page.</button></a> 
+	
+	<div  style="background-color: hsl(150, 100%, 65%)"><%@ include file="footer.jsp"%></div>
 </body>
 </html>

@@ -23,6 +23,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.mindrot.jbcrypt.BCrypt;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Entity
 @Table(name = "users")
@@ -59,9 +60,29 @@ public class User {
 	@UpdateTimestamp
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date updated;
+	
+	@OneToMany(mappedBy="sender", cascade = CascadeType.ALL)
+	private List<Message> sentMessages = new ArrayList<>();
+	
+	@OneToMany(mappedBy="receiver")
+	private List<Message> receivedMessages = new ArrayList<>();
 
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private List<Tweet> tweets = new ArrayList<>();
+
+	@OneToMany(mappedBy="user", cascade = CascadeType.ALL)
+	private List<Comment> comments = new ArrayList<>();
+	
+	
+	private String role;
+
+	public String getRole() {
+		return role;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
+	}
 
 	public Date getUpdated() {
 		return updated;
@@ -92,8 +113,8 @@ public class User {
 	}
 
 	public void setPassword(String password) {
-		this.password = BCrypt.hashpw(password, BCrypt.gensalt());
-		;
+//		this.password = BCrypt.hashpw(password, BCrypt.gensalt());
+		this.password = new BCryptPasswordEncoder(4).encode(password);
 	}
 
 	public boolean isEnabled() {
@@ -134,5 +155,29 @@ public class User {
 
 	public void setPasswordConfirmed(String passwordConfirmed) {
 		this.passwordConfirmed = passwordConfirmed;
+	}
+
+	public List<Comment> getComments() {
+		return comments;
+	}
+
+	public void setComments(List<Comment> comments) {
+		this.comments = comments;
+	}
+	
+	public List<Message> getSentMessages() {
+		return sentMessages;
+	}
+
+	public void setSentMessages(List<Message> sentMessages) {
+		this.sentMessages = sentMessages;
+	}
+
+	public List<Message> getReceivedMessages() {
+		return receivedMessages;
+	}
+
+	public void setReceivedMessages(List<Message> receivedMessages) {
+		this.receivedMessages = receivedMessages;
 	}
 }

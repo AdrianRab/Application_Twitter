@@ -9,18 +9,22 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Home page</title>
 </head>
-<body>
+<body style="background-color: hsl(204, 8%, 95%)">
 <c:set var="contextPath" value="${pageContext.request.contextPath}"/>
-	<h1>Welcome on main page of new Twitter application.</h1>
 	
+	<div  style="background-color: hsl(150, 100%, 65%)">
+		<%@ include file="header.jsp"%>
+	</div>
+	
+	<h1>Welcome on main page of new Twitter application.</h1>
 	
 	<h2>Navigation panel</h2>
 	<a href="${contextPath}/login"><button>Login</button> </a><br>
-	<a href="${contextPath}/user/register-user"><button>Register</button> </a><br>
+	<a href="${contextPath}/user/register-user"><button>Register</button> </a><br>	
 	
 	<h2>Recent tweets:</h2>
 	
-	<table>
+	<table border=1>
 		<tr>
 			<th>Posted</th>
 			<th>Content</th>
@@ -32,6 +36,7 @@
 				<c:set var="shortDesc" value="${fn:substring(tweet.text, 0, 200)}" />
 				<td>${shortDesc}</td>
 				<td><a href="${contextPath}/tweet/details/${tweet.id}"><button>Details</button></a><br></td>
+				<td><a href="${contextPath}/tweet/add-comment/${tweet.id}"><button>Comment</button></a><br></td>
 			</tr>
 		</c:forEach>
 	</table>
@@ -54,6 +59,8 @@
 	<c:if test="${user == null }">
 		<a href="${contextPath}/login"><button>Login to add new Tweet.</button> </a><br>
 	</c:if>
+	
+ 	<div  style="background-color: hsl(150, 100%, 65%)"><%@ include file="footer.jsp"%></div>
 
 	
 </body>
