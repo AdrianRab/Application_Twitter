@@ -16,7 +16,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import pl.rabowski.app.entities.User;
+import pl.rabowski.app.entities.UserRole;
 import pl.rabowski.app.repositories.UserRepository;
+import pl.rabowski.app.repositories.UserRoleRepository;
 
 @Controller
 @RequestMapping("/admin")
@@ -24,6 +26,9 @@ public class AdminController {
 	
 	@Autowired
 	UserRepository userRepository;
+	
+	@Autowired
+	UserRoleRepository userRoleRepository;
 	
 	@GetMapping("/add")
 	private ModelAndView addAdmin() {
@@ -50,8 +55,11 @@ public class AdminController {
 			return mav;
 		} else {
 			if (!result.hasErrors()) {
+				UserRole userRole = new UserRole();
 				user.setEnabled(true);
-				user.setRole("ROLE_ADMIN");
+				userRole.setUser(user);
+				userRole.setRole("ROLE_ADMIN");
+				userRoleRepository.saveAndFlush(userRole);
 				userRepository.saveAndFlush(user);
 				mav.addObject("user", user);
 				mav.setViewName("/userProfile");
@@ -69,14 +77,20 @@ public class AdminController {
 		mav.setViewName("adminPanel");
 		return mav;
 	}
-	@GetMapping("/rights/{id}")
-	private ModelAndView addAdminRights(@PathVariable long id) {
-		ModelAndView mav = new ModelAndView();
-		User user = userRepository.findOne(id);
-		user.setRole("ROLE_ADMIN");
-		mav.setViewName("redirect:http://localhost:8080/Application_Twitter/admin/panel");
-		return mav;
-	}
+	
+	//ogarn pozniej jesli bedie dzialac
+//	@GetMapping("/rights/{id}")
+//	private ModelAndView addAdminRights(@PathVariable long id) {
+//		ModelAndView mav = new ModelAndView();
+//		User user = userRepository.findOne(id);
+//		UserRole role = userRoleRepository.findOne(user.getRole().getId());
+//		role.setRole("ROLE_ADMIN");
+//		userRoleRepository.saveAndFlush(role);
+//		user.setRole(role);
+//		userRepository.saveAndFlush(user);
+//		mav.setViewName("redirect:http://localhost:8080/Application_Twitter/admin/panel");
+//		return mav;
+//	}
 	
 	
 	@ModelAttribute("allUsers")

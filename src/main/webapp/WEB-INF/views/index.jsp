@@ -3,6 +3,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri = "http://java.sun.com/jsp/jstl/functions" prefix = "fn" %>
+<%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -15,12 +16,21 @@
 	<div  style="background-color: hsl(150, 100%, 65%)">
 		<%@ include file="header.jsp"%>
 	</div>
-	
+		
 	<h1>Welcome on main page of new Twitter application.</h1>
+	
+	<security:authorize access="hasRole('ROLE_USER')">
+	    You are logged in.
+	    <br/>
+	</security:authorize>
+	<security:authorize access="hasRole('ROLE_ADMIN')">
+	    This text is only visible to an admin
+	    <br/>
+	</security:authorize>
 	
 	<h2>Navigation panel</h2>
 	<a href="${contextPath}/login"><button>Login</button> </a><br>
-	<a href="${contextPath}/user/register-user"><button>Register</button> </a><br>	
+	<a href="${contextPath}/register-user"><button>Register</button> </a><br>	
 	
 	<h2>Recent tweets:</h2>
 	
@@ -41,27 +51,40 @@
 		</c:forEach>
 	</table>
 	
-	<h3>Post tweet</h3>
-	<br>
-	<c:if test="${user != null}">
-		<form:form method="POST" modelAttribute="tweet">
-		Username: <form:input path="username" value="${user.username}"/><br>
-		<form:errors path="username" cssClass="error" element="div"/>
-		
-		Content: <form:textarea path="text" rows="20" cols="40"/><br>
-		<form:errors path="text" cssClass="error" element="div"/>
-			
-		<input type="submit" value="Add" />
-		<input type="reset" value="Clear" />
-	</form:form>
-	</c:if>
 	
-	<c:if test="${user == null }">
+	
+	<security:authorize access="hasRole('ROLE_USER')" >
+		<h3>Post tweet</h3>
+		<br>
+		<form:form method="POST" modelAttribute="tweet">
+			Username: <form:input path="username" value="${user.username}"/><br>
+			<form:errors path="username" cssClass="error" element="div"/>
+			
+			Content: <form:textarea path="text" rows="20" cols="40"/><br>
+			<form:errors path="text" cssClass="error" element="div"/>
+				
+			<input type="submit" value="Add" />
+			<input type="reset" value="Clear" />
+		</form:form>
+	</security:authorize>
+
+	
+	<security:authorize access="isAnonymous()">
 		<a href="${contextPath}/login"><button>Login to add new Tweet.</button> </a><br>
-	</c:if>
+	</security:authorize>
+						<br>
+			  			<br>
+	<security:authorize access ="hasAnyRole('ADMIN', 'USER')">
+	
+		<form action="/logout" method="post">
+			<input class="btn btn-danger" type="submit" value="Sign Out" /> 
+			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+		</form>
+	</security:authorize>
+	
 	
  	<div  style="background-color: hsl(150, 100%, 65%)"><%@ include file="footer.jsp"%></div>
-
+	
 	
 </body>
 </html>

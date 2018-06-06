@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -15,36 +16,47 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	
 	@Autowired
-	  private DataSource dataSource;
+	private DataSource dataSource;
 	
+	@Autowired
+	private BCryptPasswordEncoder bCryptPasswordEncoder;
 	
+	private String usersQuery = "select email, password, enabled from users where email=?";
+	private String rolesQuery = "SELECT email, role from users INNER JOIN user_roles ON users.user_id=user_roles.user_user_id WHERE email=?";
 	
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
     	
     	auth.jdbcAuthentication()
     	.dataSource(dataSource)
-    	.usersByUsernameQuery("select username, password, enabled from users where username=?")
-    	.authoritiesByUsernameQuery("select username, role from users where username=?")
-    	.passwordEncoder(new BCryptPasswordEncoder(4));
+    	.usersByUsernameQuery(usersQuery)
+    	.authoritiesByUsernameQuery(rolesQuery)
+    	.passwordEncoder(bCryptPasswordEncoder);
     }
     
-    protected void configure(HttpSecurity http) throws Exception {
-        http
-            .authorizeRequests()
-            	.antMatchers("/user/register-user", "/home", "/twitter", "/login").permitAll()
-            	.antMatchers("/admin/**").hasRole("ADMIN")
-            	.antMatchers("/user/**", "/tweet/**").hasAnyRole("ROLE_ADMIN", "ROLE_USER")
-                .anyRequest().authenticated()
-                .and()
-            .formLogin()
-//            	.loginPage("/login").defaultSuccessUrl("/user/my-page")
-            	.usernameParameter("username").passwordParameter("password")
-            .permitAll()
-            .and()
-            	.logout().logoutSuccessUrl("/home")
-            	.permitAll();
-    }
+    
+	@Override
+	protected void configure(HttpSecurity http) throws Exception {
+		http.authorizeRequests().antMatchers("/tweet/**", "/user/**")
+				.access("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
+				.antMatchers("/admin/**")
+				.access("hasRole('ROLE_ADMIN')")
+				.anyRequest().permitAll()
+				.and()
+				.formLogin()
+				.loginPage("/login")
+				.usernameParameter("email")
+				.passwordParameter("password")
+				.and().logout()
+				.logoutSuccessUrl("/home")
+				.and()
+				.csrf().disable(); 
+	}
+
+	@Override
+	public void configure(WebSecurity web) throws Exception {
+		web.ignoring().antMatchers("/resources/**", "/static/**", "/css/**", "/js/**", "/images/**");
+	}
 }
 
 

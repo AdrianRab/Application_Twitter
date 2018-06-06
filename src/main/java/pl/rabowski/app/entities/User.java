@@ -12,18 +12,18 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
-import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
-import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 
 @Entity
 @Table(name = "users")
@@ -34,6 +34,7 @@ public class User {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "user_id")
 	private Long id;
 
 	@NotEmpty
@@ -45,7 +46,6 @@ public class User {
 	@Transient
 	private String passwordConfirmed;
 
-	@NotNull
 	private boolean enabled;
 
 	@Email
@@ -73,14 +73,14 @@ public class User {
 	@OneToMany(mappedBy="user", cascade = CascadeType.ALL)
 	private List<Comment> comments = new ArrayList<>();
 	
+	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+	private UserRole role;
 	
-	private String role;
-
-	public String getRole() {
+	public UserRole getRole() {
 		return role;
 	}
 
-	public void setRole(String role) {
+	public void setRole(UserRole role) {
 		this.role = role;
 	}
 
@@ -113,8 +113,7 @@ public class User {
 	}
 
 	public void setPassword(String password) {
-//		this.password = BCrypt.hashpw(password, BCrypt.gensalt());
-		this.password = new BCryptPasswordEncoder(4).encode(password);
+		this.password = new BCryptPasswordEncoder().encode(password);
 	}
 
 	public boolean isEnabled() {

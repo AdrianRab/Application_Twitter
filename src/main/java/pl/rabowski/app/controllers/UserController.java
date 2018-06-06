@@ -5,6 +5,8 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,6 +21,7 @@ import pl.rabowski.app.entities.Message;
 import pl.rabowski.app.entities.User;
 import pl.rabowski.app.repositories.MessageRepository;
 import pl.rabowski.app.repositories.UserRepository;
+import pl.rabowski.app.repositories.UserRoleRepository;
 
 @Controller
 @RequestMapping("/user")
@@ -26,58 +29,24 @@ public class UserController {
 
 	@Autowired
 	UserRepository userRepository;
+	
+	@Autowired
+	UserRoleRepository userRoleRepository;
 
 	@Autowired
 	MessageRepository messageRepository;
 	
-	@GetMapping("/register-user")
-	public ModelAndView addUserForm() {
-		ModelAndView mav = new ModelAndView();
-		mav.addObject("user", new User());
-		mav.setViewName("form/registerForm");
-		return mav;
-	}
 
-	@PostMapping("/register-user")
-	public ModelAndView addUser(@RequestParam String password, @RequestParam String passwordConfirmed,  @Valid User user, BindingResult result) {
+	@GetMapping("/edit-user")
+	public ModelAndView editUserForm(@AuthenticationPrincipal UserDetails currentUser) {
 		ModelAndView mav = new ModelAndView();
-		if (!(password.equals(passwordConfirmed))) {
-			mav.addObject("errorMessage", "Provided passwords does not match. Please try again.");
-			mav.setViewName("form/registerForm");
-			return mav;
-		} else if (userRepository.findByEmailIgnoreCase(user.getEmail()) != null) {
-			mav.addObject("errorMessage", "Provided e-mail is aleady in use.");
-			mav.setViewName("form/registerForm");
-			return mav;
-		} else if (userRepository.findFirstByUsername(user.getUsername()) != null) {
-			mav.addObject("errorMessage", "Username is already in use.");
-			mav.setViewName("form/registerForm");
-			return mav;
-		} else {
-			if (!result.hasErrors()) {
-				user.setEnabled(true);
-				user.setRole("ROLE_USER");
-				userRepository.saveAndFlush(user);
-				mav.addObject("user", user);
-				mav.setViewName("redirect:http://localhost:8080/Application_Twitter/user/my-page/"+user.getId());
-				return mav;
-			} else {
-				mav.setViewName("form/registerForm");
-				return mav;
-			}
-		}
-	}
-
-	@GetMapping("/edit-user/{id}")
-	public ModelAndView editUserForm(@PathVariable long id) {
-		ModelAndView mav = new ModelAndView();
-		User user = userRepository.findOne(id);
+		User user = userRepository.findByEmailIgnoreCase(currentUser.getUsername());
 		mav.addObject("user", user);
 		mav.setViewName("form/editUser");
 		return mav;
 	}
 
-	@PostMapping("/edit-user/{id}")
+	@PostMapping("/edit-user")
 	public ModelAndView editUser(@Valid User user, BindingResult result) {
 		ModelAndView mav = new ModelAndView();
 		if (!result.hasErrors()) {
@@ -91,7 +60,7 @@ public class UserController {
 		}
 	}
 
-	@GetMapping("/detele-user/{id}")
+	@GetMapping("/delete-user/{id}")
 	public ModelAndView removeUser(@PathVariable long id) {
 		ModelAndView mav = new ModelAndView();
 		userRepository.delete(id);
@@ -99,18 +68,18 @@ public class UserController {
 		return mav;
 	}
 	
-	@GetMapping("/my-page/{id}")
-	public ModelAndView userProfile(@PathVariable long id) {
+	@GetMapping("/my-page")
+	public ModelAndView userProfile(@AuthenticationPrincipal UserDetails currentUser) {
 		ModelAndView mav = new ModelAndView();
-		mav.addObject("user", userRepository.findOne(id));
+		mav.addObject("user", userRepository.findByEmailIgnoreCase(currentUser.getUsername()));
 		mav.setViewName("/userProfile");
 		return mav;
 	}
 	
-	@GetMapping("/messages/{id}")
-	public ModelAndView userMessages(@PathVariable long id) {
+	@GetMapping("/messages")
+	public ModelAndView userMessages(@AuthenticationPrincipal UserDetails currentUser) {
 		ModelAndView mav = new ModelAndView();
-		User user = userRepository.findOne(id);
+		User user = userRepository.findByEmailIgnoreCase(currentUser.getUsername());
 		List<Message>receivedMessages = user.getReceivedMessages();
 		List<Message>sentMessages = user.getSentMessages();
 		mav.addObject("user", user);

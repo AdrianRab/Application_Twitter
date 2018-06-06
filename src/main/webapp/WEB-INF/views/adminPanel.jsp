@@ -14,6 +14,11 @@
 	
 	<c:set var="contextPath" value="${pageContext.request.contextPath}"/>
 	
+<%-- 	<c:choose>
+		<c:when test="${pageContext.request.userPrincipal.authenticated}">Show something</c:when>
+		<c:otherwise>Show something else</c:otherwise>
+	</c:choose> --%>
+	
 	<table border=1>
 	<tr>
 		<th>Username</th>

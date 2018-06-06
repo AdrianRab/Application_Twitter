@@ -27,6 +27,7 @@
 		<input type="reset" value="Reset the form" />
 	</form:form>
 	<br>
+	<a href="${contextPath}/user/my-page"><button>Back</button></a> 
 	<a href="${contextPath}/home"><button>Main page</button></a> 
 </body>
 </html>

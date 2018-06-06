@@ -9,5 +9,4 @@ import pl.rabowski.app.entities.User;
 public interface UserRepository extends JpaRepository<User, Long>{
 	User findByEmailIgnoreCase(String email);
 	User findFirstByUsername(String username);
-	
 }

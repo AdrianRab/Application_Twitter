@@ -20,7 +20,7 @@
 		</div>
 	</c:if>
 	
-	<form method="POST" action="http://localhost:8080/Application_Twitter/login">
+	<form method="POST" action="#">
 		<table border=1>
 			<tr>
 				<th>Email:</th>
@@ -45,7 +45,7 @@
 	
 	<br>
 	Don't have account yet? 
-	<a href="${contextPath}/user/register-user"><button>Register</button></a> <br>
+	<a href="${contextPath}/register-user"><button>Register</button></a> <br>
 	
 	<a href="${contextPath}/home"><button>Cancel</button></a> 
 </body>
