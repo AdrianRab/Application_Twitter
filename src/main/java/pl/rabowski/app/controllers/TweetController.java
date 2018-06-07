@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.servlet.ModelAndView;
 
 import pl.rabowski.app.entities.Comment;
@@ -60,7 +59,7 @@ public class TweetController {
 			tweetRepository.saveAndFlush(tweet);
 			mav.addObject("tweet", tweet);
 			mav.addObject("user", user);
-			mav.setViewName("redirect:http://localhost:8080/Application_Twitter/user/my-profile");
+			mav.setViewName("redirect:http://localhost:8080/Application_Twitter/user/my-page");
 			return mav;
 		} else {
 			mav.setViewName("form/tweetForm");
@@ -88,7 +87,7 @@ public class TweetController {
 		mav.addObject("user", user);
 		if (!result.hasErrors()) {
 			tweetRepository.saveAndFlush(tweet);
-			mav.setViewName("redirect:http://localhost:8080/Application_Twitter/user/my-profile");
+			mav.setViewName("redirect:http://localhost:8080/Application_Twitter/user/my-page");
 			return mav;
 		} else {
 			mav.setViewName("form/tweetForm");
@@ -100,7 +99,7 @@ public class TweetController {
 	public ModelAndView removeTweet(@PathVariable long id) {
 		ModelAndView mav = new ModelAndView();
 		tweetRepository.delete(id);
-		mav.setViewName("redirect:http://localhost:8080/Application_Twitter/user/my-profile");
+		mav.setViewName("redirect:http://localhost:8080/Application_Twitter/user/my-page");
 		return mav;
 	}
 	
@@ -158,7 +157,7 @@ public class TweetController {
 	public ModelAndView deleteComment(@PathVariable long id) {
 		ModelAndView mav = new ModelAndView();
 			commentRepository.delete(id);
-			mav.setViewName("redirect:http://localhost:8080/Application_Twitter/user/my-profile");
+			mav.setViewName("redirect:http://localhost:8080/Application_Twitter/user/my-page");
 		return mav;
 	}
 	

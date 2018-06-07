@@ -70,7 +70,7 @@
 		
 		<a href="${contextPath}/user/sendMessage/${user.id}"><button>Send message</button></a>
 		<br>
-		<a href="${contextPath}/user/my-page/${user.id}"><button>Back</button></a>	
+		<a href="${contextPath}/user/my-page"><button>Back</button></a>	
 	<div  style="background-color: hsl(150, 100%, 65%)"><%@ include file="footer.jsp"%></div> 
 </body>
 </html>

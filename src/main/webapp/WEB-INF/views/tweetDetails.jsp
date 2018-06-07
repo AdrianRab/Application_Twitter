@@ -52,7 +52,7 @@
 		</tr>
 	</table>
 	
-	<a href="${contextPath}/user/my-page/${user.id}"><button>Back to profile</button></a><br>
+	<a href="${contextPath}/user/my-page"><button>Back to profile</button></a><br>
 	<a href="${contextPath}/tweet/edit/${tweet.id}"><button>Add new tweet.</button></a><br>
 	<a href="${contextPath}/home"><button>Go to main page.</button></a> 
 </body>

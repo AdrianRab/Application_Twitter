@@ -2,17 +2,17 @@ package pl.rabowski.app.controllers;
 
 import java.util.List;
 
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.servlet.ModelAndView;
 
 import pl.rabowski.app.entities.Tweet;
@@ -36,8 +36,12 @@ public class HomePageController {
 	
 
 	@GetMapping(value = { "/", "/home", "/twitter" })
-	public ModelAndView homePage() {
+	public ModelAndView homePage(@AuthenticationPrincipal UserDetails currentUser) {
 		ModelAndView mav = new ModelAndView();
+		if(currentUser!= null) {
+			User user = userRepository.findByEmailIgnoreCase(currentUser.getUsername());
+			mav.addObject("user", user);
+		}
 		mav.setViewName("index");
 		return mav;
 	}
@@ -97,22 +101,12 @@ public class HomePageController {
 		User user = userRepository.findByEmailIgnoreCase(email);
 		if (user != null) {
 			mav.addObject("user", user);
-			mav.setViewName("index");
+			mav.setViewName("userProfile");
 			return mav;
 		}
 		mav.setViewName("form/login");
 		return mav;
 
-	}
-
-	@GetMapping("/logout")
-	public ModelAndView logout(@SessionAttribute(name = "user", required = false) User user, HttpSession session) {
-		ModelAndView mav = new ModelAndView();
-		user.setEnabled(false);
-		session.removeAttribute("loggedUser");
-		session.invalidate();
-		mav.setViewName("/home");
-		return mav;
 	}
 
 	// @PostMapping(value = { "/", "/home", "/twitter" })
