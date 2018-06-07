@@ -5,6 +5,8 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,6 +21,7 @@ import pl.rabowski.app.entities.Tweet;
 import pl.rabowski.app.entities.User;
 import pl.rabowski.app.repositories.CommentRepository;
 import pl.rabowski.app.repositories.TweetRepository;
+import pl.rabowski.app.repositories.UserRepository;
 
 @Controller
 @RequestMapping("/tweet")
@@ -29,10 +32,14 @@ public class TweetController {
 	
 	@Autowired
 	private CommentRepository commentRepository;
+	
+	@Autowired
+	UserRepository userRepository;
 
 	@GetMapping("/add")
-	public ModelAndView addTweetForm(@SessionAttribute(name = "loggedUser", required = false) User user) {
+	public ModelAndView addTweetForm(@AuthenticationPrincipal UserDetails currentUser) {
 		ModelAndView mav = new ModelAndView();
+		User user = userRepository.findByEmailIgnoreCase(currentUser.getUsername());
 		if(user == null) {
 			mav.setViewName("redirect:http://localhost:8080/Application_Twitter/login");
 			mav.addObject("errorMessage", "You need to be logged to add tweets.");
@@ -45,13 +52,15 @@ public class TweetController {
 	}
 
 	@PostMapping("/add")
-	public ModelAndView addTweet(@SessionAttribute(name = "loggedUser", required = false) User user, @Valid Tweet tweet,
+	public ModelAndView addTweet(@AuthenticationPrincipal UserDetails currentUser, @Valid Tweet tweet,
 			BindingResult result) {
 		ModelAndView mav = new ModelAndView();
+		User user = userRepository.findByEmailIgnoreCase(currentUser.getUsername());
 		if (!result.hasErrors()) {
 			tweetRepository.saveAndFlush(tweet);
 			mav.addObject("tweet", tweet);
-			mav.setViewName("redirect:http://localhost:8080/Application_Twitter/user/my-profile/" + user.getId());
+			mav.addObject("user", user);
+			mav.setViewName("redirect:http://localhost:8080/Application_Twitter/user/my-profile");
 			return mav;
 		} else {
 			mav.setViewName("form/tweetForm");
@@ -61,8 +70,9 @@ public class TweetController {
 
 	@GetMapping("/edit/{id}")
 	public ModelAndView editTweetForm(@PathVariable long id,
-			@SessionAttribute(name = "user", required = false) User user) {
+			@AuthenticationPrincipal UserDetails currentUser) {
 		ModelAndView mav = new ModelAndView();
+		User user = userRepository.findByEmailIgnoreCase(currentUser.getUsername());
 		Tweet tweet = tweetRepository.findOne(id);
 		mav.addObject("user", user);
 		mav.addObject("user", tweet);
@@ -71,12 +81,14 @@ public class TweetController {
 	}
 
 	@PostMapping("/edit/{id}")
-	public ModelAndView editTweet(@SessionAttribute(name = "loggedUser", required = false) User user, @Valid Tweet tweet,
+	public ModelAndView editTweet(@AuthenticationPrincipal UserDetails currentUser, @Valid Tweet tweet,
 			BindingResult result) {
 		ModelAndView mav = new ModelAndView();
+		User user = userRepository.findByEmailIgnoreCase(currentUser.getUsername());
+		mav.addObject("user", user);
 		if (!result.hasErrors()) {
 			tweetRepository.saveAndFlush(tweet);
-			mav.setViewName("redirect:http://localhost:8080/Application_Twitter/user/my-profile/" + user.getId());
+			mav.setViewName("redirect:http://localhost:8080/Application_Twitter/user/my-profile");
 			return mav;
 		} else {
 			mav.setViewName("form/tweetForm");
@@ -85,17 +97,17 @@ public class TweetController {
 	}
 
 	@GetMapping("/detele/{id}")
-	public ModelAndView removeTweet(@SessionAttribute(name = "loggedUser", required = false) User user,
-			@PathVariable long id) {
+	public ModelAndView removeTweet(@PathVariable long id) {
 		ModelAndView mav = new ModelAndView();
 		tweetRepository.delete(id);
-		mav.setViewName("redirect:http://localhost:8080/Application_Twitter/user/my-profile/" + user.getId());
+		mav.setViewName("redirect:http://localhost:8080/Application_Twitter/user/my-profile");
 		return mav;
 	}
 	
 	@GetMapping("/details/{id}")
-	public ModelAndView getDetails(@SessionAttribute(name = "loggedUser", required = false) User user, @PathVariable long id) {
+	public ModelAndView getDetails(@AuthenticationPrincipal UserDetails currentUser, @PathVariable long id) {
 		ModelAndView mav = new ModelAndView();
+		User user = userRepository.findByEmailIgnoreCase(currentUser.getUsername());
 		mav.addObject("user", user);
 		Tweet tweet = tweetRepository.findOne(id);
 		List<Comment> comments = commentRepository.finddByPostOrderByCreatedDesc(tweet);
@@ -108,9 +120,10 @@ public class TweetController {
 	//formularz do komentarzy dodac nie w osobnej stronie, ale na stronie ze szczegółami tweetu.
 	
 	@GetMapping("/add-comment/{id}")
-	public ModelAndView addComment(@SessionAttribute(name = "loggedUser", required = false) User user, @PathVariable long id) {
+	public ModelAndView addComment(@AuthenticationPrincipal UserDetails currentUser, @PathVariable long id) {
 		ModelAndView mav = new ModelAndView();
 		Tweet tweet = tweetRepository.findOne(id);
+		User user = userRepository.findByEmailIgnoreCase(currentUser.getUsername());
 		if(user == null) {
 			mav.setViewName("redirect:http://localhost:8080/Application_Twitter/login");
 			mav.addObject("errorMessage", "You need to be logged to add comments.");
@@ -127,8 +140,7 @@ public class TweetController {
 	}
 	
 	@PostMapping("/add-comment/{id}")
-	public ModelAndView saveComment(@SessionAttribute(name = "loggedUser", required = false) User user, @Valid Comment comment,
-			BindingResult result) {
+	public ModelAndView saveComment(@Valid Comment comment,BindingResult result) {
 		ModelAndView mav = new ModelAndView();
 		if (!result.hasErrors()) {
 			commentRepository.saveAndFlush(comment);
@@ -143,10 +155,10 @@ public class TweetController {
 	}
 	
 	@GetMapping("/delete-comment/{id}")
-	public ModelAndView deleteComment(@SessionAttribute(name = "loggedUser", required = false) User user, @PathVariable long id) {
+	public ModelAndView deleteComment(@PathVariable long id) {
 		ModelAndView mav = new ModelAndView();
 			commentRepository.delete(id);
-			mav.setViewName("redirect:http://localhost:8080/Application_Twitter/user/my-profile/" + user.getId());
+			mav.setViewName("redirect:http://localhost:8080/Application_Twitter/user/my-profile");
 		return mav;
 	}
 	
