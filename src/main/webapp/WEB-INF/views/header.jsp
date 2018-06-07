@@ -12,7 +12,7 @@
 <body>
 	This is header.
 	<security:authorize access ="hasAnyRole('ADMIN', 'USER')">
-		<form action="/home" method="post">
+		<form action="${contextPath}/home" method="post">
 			<input class="btn btn-danger" type="submit" value="Sign Out" /> 
 			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 		</form>

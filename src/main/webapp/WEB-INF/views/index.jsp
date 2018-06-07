@@ -17,66 +17,66 @@
 </head>
 <body style="background-color: hsl(204, 8%, 95%)">
 <c:set var="contextPath" value="${pageContext.request.contextPath}"/>
-	
-	<div  style="background-color: hsl(150, 100%, 65%)">
-		<%@ include file="header.jsp"%>
-	</div>
-		
-	<h1>Twitter like application.</h1>
-	
-	<security:authorize access="hasRole('ROLE_USER')">
-	    You are logged in.
-	    <br/>
-	</security:authorize>
-	<security:authorize access="hasRole('ROLE_ADMIN')">
-	    This text is only visible to an admin
-	    <br/>
-	</security:authorize>
-	<security:authorize access="hasAnyRole('ROLE_ADMIN', 'ROLE_USER')">
-		<h2>Recent tweets:</h2>
-		
-		<table border=1>
-			<tr>
-				<th>Posted</th>
-				<th>Content</th>
-				<th>Details</th>
-			</tr>
-			<c:forEach  begin="0" end="10"  var="tweet" items="${allTweets}">
-				<tr>
-					<td>${tweet.created}</td>
-					<c:set var="shortDesc" value="${fn:substring(tweet.text, 0, 200)}" />
-					<td>${shortDesc}</td>
-					<td><a href="${contextPath}/tweet/details/${tweet.id}"><button>Details</button></a><br></td>
-					<td><a href="${contextPath}/tweet/add-comment/${tweet.id}"><button>Comment</button></a><br></td>
-				</tr>
-			</c:forEach>
-		</table>
-		
-	</security:authorize>
-	
-	<security:authorize access="hasRole('ROLE_USER')" >
-		<h3>Post tweet</h3>
-			<a href="${contextPath}/tweet/add"><button class="btn btn-primary">Add tweet</button></a>
-	</security:authorize>
 
+	<div class="container-fluid bg">
+
+		<%@ include file="header.jsp"%>
+			
+		<h1>Twitter like application.</h1>
+		
+		<security:authorize access="hasRole('ROLE_USER')">
+		    You are logged in.
+		    <br/>
+		</security:authorize>
+		<security:authorize access="hasRole('ROLE_ADMIN')">
+		    This text is only visible to an admin
+		    <br/>
+		</security:authorize>
+		<security:authorize access="hasAnyRole('ROLE_ADMIN', 'ROLE_USER')">
+			<h2>Recent tweets:</h2>
+			
+			<table border=1>
+				<tr>
+					<th>Posted</th>
+					<th>Content</th>
+					<th>Details</th>
+				</tr>
+				<c:forEach  begin="0" end="10"  var="tweet" items="${allTweets}">
+					<tr>
+						<td>${tweet.created}</td>
+						<c:set var="shortDesc" value="${fn:substring(tweet.text, 0, 200)}" />
+						<td>${shortDesc}</td>
+						<td><a href="${contextPath}/tweet/details/${tweet.id}"><button>Details</button></a><br></td>
+						<td><a href="${contextPath}/tweet/add-comment/${tweet.id}"><button>Comment</button></a><br></td>
+					</tr>
+				</c:forEach>
+			</table>
+			
+		</security:authorize>
+		
+		<security:authorize access="hasRole('ROLE_USER')" >
+			<h3>Post tweet</h3>
+				<a href="${contextPath}/tweet/add"><button class="btn btn-primary">Add tweet</button></a>
+		</security:authorize>
 	
-	<security:authorize access="isAnonymous()">
-		<a href="${contextPath}/login"><button>Login to add new Tweet.</button> </a><br>
-		Does not have  account? <a href="${contextPath}/register-user"><button>Register.</button></a>
-	</security:authorize>
-						<br>
-			  			<br>
-	<security:authorize access ="hasAnyRole('ADMIN', 'USER')">
+		
+		<security:authorize access="isAnonymous()">
+			<a href="${contextPath}/login"><button>Login to add new Tweet.</button> </a><br>
+			Does not have  account? <a href="${contextPath}/register-user"><button>Register.</button></a>
+		</security:authorize>
+							<br>
+				  			<br>
+		<security:authorize access ="hasAnyRole('ADMIN', 'USER')">
+		
+			<form action="${contextPath}/home" method="post">
+				<input class="btn btn-danger" type="submit" value="Sign Out" /> 
+				<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+			</form>
+		</security:authorize>
+		
+		
+		<%@ include file="footer.jsp"%>
 	
-		<form action="/home" method="post">
-			<input class="btn btn-danger" type="submit" value="Sign Out" /> 
-			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-		</form>
-	</security:authorize>
-	
-	
- 	<div  style="background-color: hsl(150, 100%, 65%)"><%@ include file="footer.jsp"%></div>
-	
-	
+	</div>
 </body>
 </html>

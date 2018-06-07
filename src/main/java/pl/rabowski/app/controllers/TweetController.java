@@ -134,7 +134,7 @@ public class TweetController {
 			comment.setUser(user);
 			comment.setPost(tweet);
 			mav.addObject("comment", comment);
-			mav.setViewName("form/commentForm");
+			mav.setViewName("tweetDetails");
 		return mav;
 	}
 	

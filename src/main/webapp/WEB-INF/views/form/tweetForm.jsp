@@ -34,7 +34,7 @@
 				<form:errors path="text" cssClass="error" element="div" />
 			</div>
 			<input class="btn btn-primary" type="submit" value="Add" />
-			<input class="btn btn-primary" type="reset" value="Clear"/>
+			<input class="btn btn-danger" type="reset" value="Clear"/>
 		</form:form>
 		<br>
 	</div>
