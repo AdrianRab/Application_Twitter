@@ -109,14 +109,12 @@ public class TweetController {
 		User user = userRepository.findByEmailIgnoreCase(currentUser.getUsername());
 		mav.addObject("user", user);
 		Tweet tweet = tweetRepository.findOne(id);
-		List<Comment> comments = commentRepository.finddByPostOrderByCreatedDesc(tweet);
+		List<Comment> comments = commentRepository.findAllByPostOrderByCreatedDesc(tweet);
 		mav.addObject("comments", comments);
 		mav.addObject("tweet", tweet);
 		mav.setViewName("/tweetDetails");
 		return mav;
 	}
-	
-	//formularz do komentarzy dodac nie w osobnej stronie, ale na stronie ze szczegółami tweetu.
 	
 	@GetMapping("/add-comment/{id}")
 	public ModelAndView addComment(@AuthenticationPrincipal UserDetails currentUser, @PathVariable long id) {
@@ -134,17 +132,21 @@ public class TweetController {
 			comment.setUser(user);
 			comment.setPost(tweet);
 			mav.addObject("comment", comment);
-			mav.setViewName("tweetDetails");
+			mav.setViewName("form/commentForm");
 		return mav;
 	}
 	
 	@PostMapping("/add-comment/{id}")
-	public ModelAndView saveComment(@Valid Comment comment,BindingResult result) {
+	public ModelAndView saveComment(@AuthenticationPrincipal UserDetails currentUser, @Valid Comment comment,BindingResult result) {
 		ModelAndView mav = new ModelAndView();
+		User user = userRepository.findByEmailIgnoreCase(currentUser.getUsername());
 		if (!result.hasErrors()) {
 			commentRepository.saveAndFlush(comment);
-			mav.addObject("tweet", comment);
-			mav.setViewName("redirect:http://localhost:8080/Application_Twitter/home");
+			Tweet tweet = comment.getPost();
+			mav.addObject("comment", comment);
+			mav.addObject("tweet", tweet);
+			mav.addObject("user", user);			
+			mav.setViewName("redirect:http://localhost:8080/Application_Twitter/tweet/details/"+tweet.getId());
 			return mav;
 		} else {
 			mav.setViewName("form/tweetForm");

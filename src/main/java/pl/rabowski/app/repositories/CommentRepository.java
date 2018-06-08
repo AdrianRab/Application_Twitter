@@ -12,9 +12,10 @@ import pl.rabowski.app.entities.Tweet;
 public interface CommentRepository extends JpaRepository<Comment, Long>{
 	
 	@Query("select c from Comment c where c.post = :post order by c.created desc")
-	List<Comment> finddByPostOrderByCreatedDesc(@Param("post") Tweet post);
+	List<Comment> findAllByPostOrderByCreatedDesc(@Param("post") Tweet post);
 	
 	@Query("select c from Comment c where c.post.id = :postId order by c.created desc")
-	List<Comment> finddByPostIdOrderByCreatedDesc(@Param("postId") int postId);
+	List<Comment> findAlldByPostIdOrderByCreatedDesc(@Param("postId") int postId);
+
 	
 }

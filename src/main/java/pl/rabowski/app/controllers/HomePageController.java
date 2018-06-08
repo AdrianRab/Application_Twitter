@@ -108,6 +108,13 @@ public class HomePageController {
 		return mav;
 
 	}
+	
+	@PostMapping("/logout")
+	public ModelAndView logoutPage() {
+		ModelAndView mav = new ModelAndView();
+		mav.setViewName("index");
+		return mav;
+	}
 
 	// @PostMapping(value = { "/", "/home", "/twitter" })
 	// public ModelAndView addTweet(@SessionAttribute(name = "user", required =
@@ -132,7 +139,7 @@ public class HomePageController {
 
 	@ModelAttribute("allTweets")
 	public List<Tweet> getAllTweets() {
-		List<Tweet> tweets = tweetRepository.findAll();
+		List<Tweet> tweets = tweetRepository.findAllByOrderByCreatedDesc();
 		return tweets;
 	}
 }

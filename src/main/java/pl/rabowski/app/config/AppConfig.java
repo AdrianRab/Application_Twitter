@@ -24,6 +24,7 @@ import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
 
+import pl.rabowski.app.converters.TweetConverter;
 import pl.rabowski.app.converters.UserConverter;
 
 @Configuration
@@ -86,10 +87,15 @@ public class AppConfig extends WebMvcConfigurerAdapter {
 	@Override
 	public void addFormatters(FormatterRegistry registry) {
 		registry.addConverter(getUserConverter());
+		registry.addConverter(getTweetConverter());
 	}
 	
 	@Bean
 	public UserConverter getUserConverter() {
 		return new UserConverter();
+	}
+	
+	@Bean TweetConverter getTweetConverter() {
+		return new TweetConverter();
 	}
 }
