@@ -15,17 +15,30 @@
 <title></title>
 </head>
 <body>
-	<div class="container-fluid bg">
-		<div class="container">
-		<c:set var="contextPath" value="${pageContext.request.contextPath}"/>
-			This is header.
-			<security:authorize access ="hasAnyRole('ADMIN', 'USER')">
-				<form action="${contextPath}/logout" method="post">
+	<c:set var="contextPath" value="${pageContext.request.contextPath}"/>
+	<nav class="navbar navbar-expand-lg navbar-light bg-light">
+	  <a class="navbar-brand" href="${contextPath}/home">Twitter</a>
+	  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+	    <span class="navbar-toggler-icon"></span>
+	  </button>
+		<security:authorize access ="hasAnyRole('ADMIN', 'USER')">
+		  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+		    <ul class="navbar-nav mr-auto">
+		      <li class="nav-item">
+		        <a class="nav-link" href="${contextPath}/user/my-page">My profile <span class="sr-only">(current)</span></a>
+		      </li>
+		      <li class="nav-item">
+		        <a class="nav-link" href="${contextPath}/user/my-tweets">My Tweets</a>
+		      </li>
+		      <li class="nav-item">
+		        <form action="${contextPath}/logout" method="post">
 					<input class="btn btn-danger" type="submit" value="Sign Out" /> 
 					<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 				</form>
-			</security:authorize>
-		</div>
-	</div>
+		      </li>
+		    </ul>
+		  </div>
+	  </security:authorize>
+	</nav>
 </body>
 </html>

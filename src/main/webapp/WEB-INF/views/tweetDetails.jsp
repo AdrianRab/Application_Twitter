@@ -16,9 +16,7 @@
 <body>
 	<c:set var="contextPath" value="${pageContext.request.contextPath}"/>
 	<div class="container-fluid bg">
-		<div class="container">
-			<%@ include file="header.jsp"%>
-		</div>
+		<%@ include file="header.jsp"%>
 		
 		
 		<div class="container">
@@ -81,8 +79,9 @@
 				    </div>
 				   	<div class="col">
 						<div class="btn-group btn-group-lg">
-							<a href="${contextPath}/user/my-page"><button class="btn btn-dark">Back to profile</button></a><br>
-							<a href="${contextPath}/tweet/edit/${tweet.id}"><button class="btn btn-dark">Add new tweet.</button></a><br>
+							<a href="${contextPath}/user/my-page"><button class="btn btn-dark">Back to profile</button></a>
+							<a href="${contextPath}/tweet/edit/${tweet.id}"><button class="btn btn-dark">Edit tweet.</button></a>
+							<a href="${contextPath}/tweet/add"><button class="btn btn-dark">Add new tweet.</button></a>
 							<a href="${contextPath}/home"><button class="btn btn-dark">Go to main page.</button></a> 
 						</div>	   		
 				    </div>

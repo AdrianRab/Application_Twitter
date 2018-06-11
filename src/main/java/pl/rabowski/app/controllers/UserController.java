@@ -18,8 +18,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import pl.rabowski.app.entities.Message;
+import pl.rabowski.app.entities.Tweet;
 import pl.rabowski.app.entities.User;
 import pl.rabowski.app.repositories.MessageRepository;
+import pl.rabowski.app.repositories.TweetRepository;
 import pl.rabowski.app.repositories.UserRepository;
 import pl.rabowski.app.repositories.UserRoleRepository;
 
@@ -35,6 +37,9 @@ public class UserController {
 
 	@Autowired
 	MessageRepository messageRepository;
+	
+	@Autowired
+	private TweetRepository tweetRepository;
 	
 
 	@GetMapping("/edit-user")
@@ -127,6 +132,17 @@ public class UserController {
 	public List<User> getAllTweets() {
 		List<User> users = userRepository.findAll();
 		return users;
+	}
+	
+	@GetMapping("/my-tweets")
+	public ModelAndView myTweets(@AuthenticationPrincipal UserDetails currentUser) {
+		ModelAndView mav = new ModelAndView();
+		User user = userRepository.findByEmailIgnoreCase(currentUser.getUsername());
+		List<Tweet> myTweets = tweetRepository.findByUser(user);
+		mav.addObject("user", user);
+		mav.addObject("myTweets", myTweets);
+		mav.setViewName("/myTweets");
+		return mav;
 	}
 	
 }

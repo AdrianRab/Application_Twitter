@@ -15,14 +15,14 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
 <title>Home page</title>
 </head>
-<body style="background-color: hsl(204, 8%, 95%)">
+<body>
 <c:set var="contextPath" value="${pageContext.request.contextPath}"/>
 
 	<div class="container-fluid bg">
 
 		<%@ include file="header.jsp"%>
 			
-		<h1>Twitter like application.</h1>
+		<p class="h1 text-muted">Twitter like application.</p>
 		
 		<security:authorize access="hasRole('ROLE_USER')">
 		    You are logged in.
@@ -35,12 +35,15 @@
 		<security:authorize access="hasAnyRole('ROLE_ADMIN', 'ROLE_USER')">
 			<h2>Recent tweets:</h2>
 			
-			<table border=1>
-				<tr>
-					<th>Posted</th>
-					<th>Content</th>
-					<th>Details</th>
-				</tr>
+			<table class="table">
+				<thead class="thead-dark">
+					<tr>
+						<th>Posted</th>
+						<th>Content</th>
+						<th>Details</th>
+						<th>Action</th>
+					</tr>
+				</thead>
 				<c:forEach  begin="0" end="10"  var="tweet" items="${allTweets}">
 					<tr>
 						<td>${tweet.created}</td>
@@ -51,30 +54,29 @@
 					</tr>
 				</c:forEach>
 			</table>
-			
 		</security:authorize>
 		
-		<security:authorize access="hasRole('ROLE_USER')" >
-			<h3>Post tweet</h3>
-				<a href="${contextPath}/tweet/add"><button class="btn btn-primary">Add tweet</button></a>
-		</security:authorize>
+		
+			<div class="container">
+				<div class="row">
+				    <div class="col">
+				    </div>
+				   	<div class="col">
+						<security:authorize access="hasRole('ROLE_USER')" >
+							<a href="${contextPath}/tweet/add"><button class="btn btn-primary">Add tweet</button></a>
+					</security:authorize>
+					<security:authorize access="isAnonymous()">
+						<a href="${contextPath}/login"><button>Login to add new Tweet.</button> </a><br>
+						Does not have  account? <a href="${contextPath}/register-user"><button>Register.</button></a>
+					</security:authorize>  		
+				    </div>
+				    <div class="col">
+				    </div>
+				</div>
+			</div>
+		<br>
+		<br>
 	
-		
-		<security:authorize access="isAnonymous()">
-			<a href="${contextPath}/login"><button>Login to add new Tweet.</button> </a><br>
-			Does not have  account? <a href="${contextPath}/register-user"><button>Register.</button></a>
-		</security:authorize>
-							<br>
-				  			<br>
-		<security:authorize access ="hasAnyRole('ADMIN', 'USER')">
-		
-			<form action="${contextPath}/logout" method="post">
-				<input class="btn btn-danger" type="submit" value="Sign Out" /> 
-				<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-			</form>
-		</security:authorize>
-		
-		
 		<%@ include file="footer.jsp"%>
 	
 	</div>

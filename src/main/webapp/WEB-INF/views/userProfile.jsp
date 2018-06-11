@@ -21,11 +21,6 @@
 	<div class="container">
 		<div class="row">
 			<div class="col">
-				<security:authorize access="hasRole('ROLE_USER')">
-				    You are logged in.
-				    <br/>
-				</security:authorize>
-				
 				<c:if test="${user.role == ADMIN_ROLE}">
 					<p>You are logged as admin.</p>
 				</c:if>
@@ -33,9 +28,14 @@
 		</div>
 	</div>
 	<c:set var="contextPath" value="${pageContext.request.contextPath}"/>
-	<h2>Welcome ${user.username}!</h2>
+	<div class="container">
+		<div class="row">
+			<div class="col">
+				<p class="h2 text-muted">Welcome ${user.username}!</p>
+			</div>
+		</div>
+	</div>
 	<br>
-	
 	<div class="container">
 		<h3>Account details.</h3>
 		<table class="table">
@@ -84,6 +84,7 @@
 					<div class="btn-group btn-group-lg">
 						<a href="${contextPath}/user/messages/${user.id}"><button class="btn btn-dark">Messages</button></a>
 						<a href="${contextPath}/user/edit-user"><button class="btn btn-dark">Edit profile.</button></a><br>
+						<a href="${contextPath}/user/my-tweets"><button class="btn btn-dark">My tweets</button></a>
 						<a href="${contextPath}/tweet/add"><button class="btn btn-dark">Add new tweet.</button></a><br>
 						<a href="${contextPath}/home"><button class="btn btn-dark">Go to main page.</button></a> 
 					</div>	   		
