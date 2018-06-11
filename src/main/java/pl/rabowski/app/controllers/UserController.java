@@ -95,29 +95,30 @@ public class UserController {
 	}
 	
 	@GetMapping("/delete/{id}")
-	public ModelAndView deleteMessage(@PathVariable long id) {
+	public ModelAndView deleteMessage(@AuthenticationPrincipal UserDetails currentUser, @PathVariable long id) {
 		ModelAndView mav = new ModelAndView();
 		Message message = messageRepository.findOne(id);
-		long userID = message.getSender().getId();
+		mav.addObject("user", userRepository.findByEmailIgnoreCase(currentUser.getUsername()));
 		messageRepository.delete(message);
-		mav.setViewName("redirect:http://localhost:8080/Application_Twitter/user/messages/"+userID);
+		mav.setViewName("redirect:http://localhost:8080/Application_Twitter/user/messages");
 		return mav;
 	}
 	
-	@GetMapping("/sendMessage/{id}")
-	public ModelAndView sendMessageForm(@PathVariable long id) {
+	@GetMapping("/sendMessage")
+	public ModelAndView sendMessageForm(@AuthenticationPrincipal UserDetails currentUser) {
 		ModelAndView mav = new ModelAndView();
-		mav.addObject("user", userRepository.findOne(id));
+		mav.addObject("user", userRepository.findByEmailIgnoreCase(currentUser.getUsername()));
 		mav.addObject("message", new Message());
 		mav.setViewName("form/sendMessage");
 		return mav;
 	}
 	
-	@PostMapping("/sendMessage/{id}")
-	public ModelAndView sendMessage(@RequestParam String password, @RequestParam String passwordConfirmed,  @Valid Message message, BindingResult result) {
+	@PostMapping("/sendMessage")
+	public ModelAndView sendMessage(@AuthenticationPrincipal UserDetails currentUser, @Valid Message message, BindingResult result) {
 		ModelAndView mav = new ModelAndView();
 		if (!result.hasErrors()) {	
 			long userId = message.getSender().getId();
+			mav.addObject("user", userRepository.findByEmailIgnoreCase(currentUser.getUsername()));
 			messageRepository.saveAndFlush(message);
 			mav.addObject("message", message);
 			mav.setViewName("redirect:http://localhost:8080/Application_Twitter/user/messages/"+userId);

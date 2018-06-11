@@ -6,11 +6,17 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
 <title>Messages</title>
 </head>
 <body>
-	<div  style="background-color: hsl(150, 100%, 65%)"><%@ include file="header.jsp"%></div>
-		<c:set var="contextPath" value="${pageContext.request.contextPath}"/>
+	<c:set var="contextPath" value="${pageContext.request.contextPath}"/>
+	<div class="container-fluid bg">
+		<%@ include file="header.jsp"%>
 		<div>
 			<h2>Received messages</h2>
 			<c:if test="${message != null}">
@@ -20,7 +26,7 @@
 			</c:if>
 			
 			<div>
-				<table border=1>
+				<table class="table">
 					<tr>
 						<th>Date</th>
 						<th>Title</th>
@@ -45,7 +51,7 @@
 		<div>
 			<h2>Sent messages</h2>
 			<div id="sent"> <!-- w JS zrobić by sie rozsuwalo po klknieciu -->
-				<table border=1>
+				<table class="table">
 			<tr>
 				<th>Date</th>
 				<th>Title</th>
@@ -68,9 +74,24 @@
 			</div>
 		</div>
 		
-		<a href="${contextPath}/user/sendMessage/${user.id}"><button>Send message</button></a>
-		<br>
-		<a href="${contextPath}/user/my-page"><button>Back</button></a>	
-	<div  style="background-color: hsl(150, 100%, 65%)"><%@ include file="footer.jsp"%></div> 
+		
+			<div class="container">
+				<div class="row">
+				    <div class="col">
+				    </div>
+				   	<div class="col">
+						<div class="btn-group btn-group-lg">
+							<a href="${contextPath}/user/sendMessage"><button class="btn btn-dark">Send message</button></a>
+							<a href="${contextPath}/user/my-page"><button class="btn btn-dark">Back to profile</button></a>
+							<a href="${contextPath}/tweet/add"><button class="btn btn-dark">Add new tweet.</button></a>
+							<a href="${contextPath}/home"><button class="btn btn-dark">Go to main page.</button></a> 
+						</div>	   		
+				    </div>
+				    <div class="col">
+				    </div>
+				</div>
+			</div>
+		<%@ include file="footer.jsp"%>
+	</div>
 </body>
 </html>
