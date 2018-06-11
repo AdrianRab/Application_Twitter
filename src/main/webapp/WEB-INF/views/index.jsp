@@ -21,9 +21,14 @@
 	<div class="container-fluid bg">
 
 		<%@ include file="header.jsp"%>
-			
-		<p class="h1 text-muted">Twitter like application.</p>
-		
+		<div class="container">
+			<div class="row">
+				<div class="col">
+					<p class="h1 text-muted">Twitter like application.</p>
+				 </div>	
+			</div>
+		</div>
+	
 		<security:authorize access="hasRole('ROLE_USER')">
 		    You are logged in.
 		    <br/>
@@ -66,8 +71,8 @@
 							<a href="${contextPath}/tweet/add"><button class="btn btn-primary">Add tweet</button></a>
 					</security:authorize>
 					<security:authorize access="isAnonymous()">
-						<a href="${contextPath}/login"><button>Login to add new Tweet.</button> </a><br>
-						Does not have  account? <a href="${contextPath}/register-user"><button>Register.</button></a>
+						<a href="${contextPath}/login"><button button class="btn btn-warning">Login to add new Tweet.</button> </a><br>
+						Does not have  account? <a href="${contextPath}/register-user"><button button class="btn btn-success">Register.</button></a>
 					</security:authorize>  		
 				    </div>
 				    <div class="col">

@@ -82,7 +82,7 @@
 				 </div>
 				 <div class="col">
 					<div class="btn-group btn-group-lg">
-						<a href="${contextPath}/user/messages/${user.id}"><button class="btn btn-dark">Messages</button></a>
+						<a href="${contextPath}/user/messages"><button class="btn btn-dark">Messages</button></a>
 						<a href="${contextPath}/user/edit-user"><button class="btn btn-dark">Edit profile.</button></a><br>
 						<a href="${contextPath}/user/my-tweets"><button class="btn btn-dark">My tweets</button></a>
 						<a href="${contextPath}/tweet/add"><button class="btn btn-dark">Add new tweet.</button></a><br>
