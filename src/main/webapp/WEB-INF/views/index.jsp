@@ -43,7 +43,8 @@
 			<table class="table">
 				<thead class="thead-dark">
 					<tr>
-						<th>Posted</th>
+						<th>Date</th>
+						<th>Posted by</th>
 						<th>Content</th>
 						<th>Details</th>
 						<th>Action</th>
@@ -52,6 +53,7 @@
 				<c:forEach  begin="0" end="10"  var="tweet" items="${allTweets}">
 					<tr>
 						<td>${tweet.created}</td>
+						<td>${tweet.user.username}</td>
 						<c:set var="shortDesc" value="${fn:substring(tweet.text, 0, 200)}" />
 						<td>${shortDesc}</td>
 						<td><a href="${contextPath}/tweet/details/${tweet.id}"><button>Details</button></a><br></td>
