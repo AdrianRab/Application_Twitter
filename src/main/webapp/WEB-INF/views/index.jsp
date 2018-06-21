@@ -24,17 +24,21 @@
 		<div class="container">
 			<div class="row">
 				<div class="col">
-					<p class="h1 text-muted">Twitter like application.</p>
+				 </div>
+				<div class="col">
+					<p class="h1 text-muted">Twitter application.</p>
 				 </div>	
+				 <div class="col">
+				 </div>
 			</div>
 		</div>
 	
 		<security:authorize access="hasRole('ROLE_USER')">
-		    You are logged in.
+		    You are logged in as ${user.username}
 		    <br/>
 		</security:authorize>
 		<security:authorize access="hasRole('ROLE_ADMIN')">
-		    This text is only visible to an admin
+		    This text is only visible to an admin.
 		    <br/>
 		</security:authorize>
 		<security:authorize access="hasAnyRole('ROLE_ADMIN', 'ROLE_USER')">
@@ -63,7 +67,8 @@
 			</table>
 		</security:authorize>
 		
-		
+		<br>
+		<br>
 			<div class="container">
 				<div class="row">
 				    <div class="col">
@@ -72,10 +77,18 @@
 						<security:authorize access="hasRole('ROLE_USER')" >
 							<a href="${contextPath}/tweet/add"><button class="btn btn-primary">Add tweet</button></a>
 					</security:authorize>
-					<security:authorize access="isAnonymous()">
-						<a href="${contextPath}/login"><button button class="btn btn-warning">Login to add new Tweet.</button> </a><br>
-						Does not have  account? <a href="${contextPath}/register-user"><button button class="btn btn-success">Register.</button></a>
-					</security:authorize>  		
+					<div class="container">
+						<security:authorize access="isAnonymous()">
+							<table class="table">
+								<tr>
+									<td><a href="${contextPath}/login"><button button class="btn btn-warning">Login to add new Tweet.</button> </a></td>
+								</tr>
+								<tr>
+									<td><p class="h5 text-muted">Does not have  account? <a href="${contextPath}/register-user"><button button class="btn btn-success">Register.</button></a></p></td>
+								</tr>
+							</table>
+						</security:authorize> 
+					</div> 		
 				    </div>
 				    <div class="col">
 				    </div>
@@ -83,7 +96,8 @@
 			</div>
 		<br>
 		<br>
-	
+		<br>
+		<br>
 		<%@ include file="footer.jsp"%>
 	
 	</div>

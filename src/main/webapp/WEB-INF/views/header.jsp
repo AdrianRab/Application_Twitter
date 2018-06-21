@@ -31,6 +31,9 @@
 		        <a class="nav-link" href="${contextPath}/user/my-tweets">My Tweets</a>
 		      </li>
 		      <li class="nav-item">
+		        <a class="nav-link" href="${contextPath}/user/sendMessage">Send message</a>
+		      </li>
+		      <li class="nav-item">
 		        <form action="${contextPath}/logout" method="post">
 					<input class="btn btn-danger" type="submit" value="Sign Out" /> 
 					<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>

@@ -18,10 +18,10 @@
 			<div class="form-group">
 				To: <form:select path="receiver">
 						<form:option value="-" label="--Please Select--"/>
-						<form:options items="${allUsers}"/>
+						<form:options items="${allUsers}" itemLabel="username"	itemValue="id"/>
 				</form:select>
-				
-				Title: <form:input path="title" value="${message.title}"/><br>
+				<br>
+				Title: <form:input path="title"/><br>
 				<form:errors path="title" cssClass="error" element="div"/>
 				
 				Message content: <form:textarea path="content" rows="20" cols="40"/><br>

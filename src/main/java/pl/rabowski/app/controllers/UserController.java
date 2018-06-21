@@ -1,6 +1,8 @@
 package pl.rabowski.app.controllers;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.ListIterator;
 
 import javax.validation.Valid;
 
@@ -96,9 +98,7 @@ public class UserController {
 	@GetMapping("/delete/{id}")
 	public ModelAndView deleteMessage(@AuthenticationPrincipal UserDetails currentUser, @PathVariable long id) {
 		ModelAndView mav = new ModelAndView();
-//		Message message = messageRepository.findOne(id);
 		mav.addObject("user", userRepository.findByEmailIgnoreCase(currentUser.getUsername()));
-//		messageRepository.delete(message);
 		messageRepository.delete(id);
 		mav.setViewName("redirect:http://localhost:8080/Application_Twitter/user/messages");
 		return mav;
@@ -107,7 +107,8 @@ public class UserController {
 	@GetMapping("/sendMessage")
 	public ModelAndView sendMessageForm(@AuthenticationPrincipal UserDetails currentUser) {
 		ModelAndView mav = new ModelAndView();
-		mav.addObject("user", userRepository.findByEmailIgnoreCase(currentUser.getUsername()));
+		User user = userRepository.findByEmailIgnoreCase(currentUser.getUsername());
+		mav.addObject("user", user);
 		mav.addObject("message", new Message());
 		mav.setViewName("form/sendMessage");
 		return mav;
@@ -117,11 +118,10 @@ public class UserController {
 	public ModelAndView sendMessage(@AuthenticationPrincipal UserDetails currentUser, @Valid Message message, BindingResult result) {
 		ModelAndView mav = new ModelAndView();
 		if (!result.hasErrors()) {	
-			long userId = message.getSender().getId();
 			mav.addObject("user", userRepository.findByEmailIgnoreCase(currentUser.getUsername()));
 			messageRepository.saveAndFlush(message);
 			mav.addObject("message", message);
-			mav.setViewName("redirect:http://localhost:8080/Application_Twitter/user/messages/"+userId);
+			mav.setViewName("redirect:http://localhost:8080/Application_Twitter/user/messages");
 			return mav;
 		} else {
 			mav.setViewName("form/registerForm");
@@ -130,9 +130,17 @@ public class UserController {
 	}
 	
 	@ModelAttribute("allUsers")
-	public List<User> getAllTweets() {
+	public List<User> getAllTweets(@AuthenticationPrincipal UserDetails currentUser) {
 		List<User> users = userRepository.findAll();
-		return users;
+		User user = userRepository.findByEmailIgnoreCase(currentUser.getUsername());
+		ListIterator<User> iter = users.listIterator();
+		List<User> usersWithoutLoogedUser = new ArrayList<>();
+		while(iter.hasNext()) {
+			if(!user.equals(iter.next())) {
+				usersWithoutLoogedUser.add(iter.next());
+			}
+		}
+		return usersWithoutLoogedUser;
 	}
 	
 	@GetMapping("/my-tweets")
