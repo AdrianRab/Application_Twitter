@@ -77,7 +77,7 @@ public class AdminController {
 		return mav;
 	}
 	
-	//ogarn pozniej jesli bedie dzialac
+	//ogarn pozniej
 //	@GetMapping("/rights/{id}")
 //	private ModelAndView addAdminRights(@PathVariable long id) {
 //		ModelAndView mav = new ModelAndView();

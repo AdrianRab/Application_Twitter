@@ -64,7 +64,7 @@ public class User {
 	@OneToMany(mappedBy="sender", cascade = CascadeType.ALL)
 	private List<Message> sentMessages = new ArrayList<>();
 	
-	@OneToMany(mappedBy="receiver")
+	@OneToMany(mappedBy="receiver", cascade = CascadeType.MERGE)
 	private List<Message> receivedMessages = new ArrayList<>();
 
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)

@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import pl.rabowski.app.entities.Message;
@@ -85,8 +84,8 @@ public class UserController {
 	public ModelAndView userMessages(@AuthenticationPrincipal UserDetails currentUser) {
 		ModelAndView mav = new ModelAndView();
 		User user = userRepository.findByEmailIgnoreCase(currentUser.getUsername());
-		List<Message>receivedMessages = user.getReceivedMessages();
-		List<Message>sentMessages = user.getSentMessages();
+		List<Message>receivedMessages = messageRepository.findReceivedMessagesByUserId(user.getId());
+		List<Message>sentMessages = messageRepository.findSendMessagesByUserId(user.getId());
 		mav.addObject("user", user);
 		mav.addObject("receivedMessages", receivedMessages );
 		mav.addObject("sentMessages", sentMessages);
@@ -97,9 +96,10 @@ public class UserController {
 	@GetMapping("/delete/{id}")
 	public ModelAndView deleteMessage(@AuthenticationPrincipal UserDetails currentUser, @PathVariable long id) {
 		ModelAndView mav = new ModelAndView();
-		Message message = messageRepository.findOne(id);
+//		Message message = messageRepository.findOne(id);
 		mav.addObject("user", userRepository.findByEmailIgnoreCase(currentUser.getUsername()));
-		messageRepository.delete(message);
+//		messageRepository.delete(message);
+		messageRepository.delete(id);
 		mav.setViewName("redirect:http://localhost:8080/Application_Twitter/user/messages");
 		return mav;
 	}

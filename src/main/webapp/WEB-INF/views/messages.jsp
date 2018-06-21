@@ -17,6 +17,7 @@
 	<c:set var="contextPath" value="${pageContext.request.contextPath}"/>
 	<div class="container-fluid bg">
 		<%@ include file="header.jsp"%>
+		
 		<div>
 			<h2>Received messages</h2>
 			<c:if test="${message != null}">
@@ -26,54 +27,63 @@
 			</c:if>
 			
 			<div>
-				<table class="table">
-					<tr>
-						<th>Date</th>
-						<th>Title</th>
-						<th>From</th>
-						<th>Action</th>
-					</tr>
-				<c:forEach items="${receivedMessages}" var="received">
-					<tr>
-							<td>${received.timeSent}</td>
-							<td>${received.title}</td>
-							<td>${received.sender.username}</td>
-							<td><a href="${contextPath}/user/delete/${received.id}"><button>Delete</button></a>	</td>
-					</tr>
-						<tr id="receivedContent"> <!-- w JS zrobić by sie rozsuwalo po klknieciu -->
-							<td>${received.content}</td>
+				<c:if test="${not empty receivedMessages}">
+					<table class="table">
+						<tr>
+							<th>Date</th>
+							<th>Title</th>
+							<th>From</th>
+							<th>Action</th>
 						</tr>
-				</c:forEach>
-				</table>
+					<c:forEach items="${receivedMessages}" var="received">
+						<tr>
+								<td>${received.timeSent}</td>
+								<td>${received.title}</td>
+								<td>${received.sender.username}</td>
+								<td><a href="${contextPath}/user/delete/${received.id}"><button>Delete</button></a>	</td>
+						</tr>
+							<tr id="receivedContent"> <!-- w JS zrobić by sie rozsuwalo po klknieciu -->
+								<td>${received.content}</td>
+							</tr>
+					</c:forEach>
+					</table>
+				</c:if>
+				<c:if test="${empty receivedMessages || receivedMessages == null}">
+					<p>You do not have any message yet.</p>
+				</c:if>
 			</div>
 		</div>
 		
+		<c:if test="${not empty sentMessages}">
 		<div>
 			<h2>Sent messages</h2>
 			<div id="sent"> <!-- w JS zrobić by sie rozsuwalo po klknieciu -->
-				<table class="table">
-			<tr>
-				<th>Date</th>
-				<th>Title</th>
-				<th>From</th>
-				<th>Action</th>
-			</tr>
-					<c:forEach items="${sentMessages}" var="sent">
+					<table class="table">
 						<tr>
-							<td>${sent.timeSent}</td>
-							<td>${sent.title}</td>
-							<td>${sent.sender.username}</td>
-							<td><a href="${contextPath}/user/delete/${sent.id}"><button>Delete</button></a>	</td>
-				
+							<th>Date</th>
+							<th>Title</th>
+							<th>To</th>
+							<th>Action</th>
 						</tr>
-						<tr id="sentContent"> <!-- w JS zrobić by sie rozsuwalo po klknieciu -->
-							<td>${sent.content}</td>
-						</tr>
-					</c:forEach>
-				</table>
+						<c:forEach items="${sentMessages}" var="sent">
+							<tr>
+								<td>${sent.timeSent}</td>
+								<td>${sent.title}</td>
+								<td>${sent.receiver.username}</td>
+								<td><a href="${contextPath}/user/delete/${sent.id}"><button>Delete</button></a>	</td>
+					
+							</tr>
+							<tr id="sentContent"> <!-- w JS zrobić by sie rozsuwalo po klknieciu -->
+								<td>${sent.content}</td>
+							</tr>
+						</c:forEach>
+					</table>	
+<%-- 				<c:if test="${empty sentMessages || sentMessage == null}">
+					<p>You have not sent any meessages yet.</p>
+				</c:if> --%>
 			</div>
 		</div>
-		
+		</c:if>
 		
 			<div class="container">
 				<div class="row">
