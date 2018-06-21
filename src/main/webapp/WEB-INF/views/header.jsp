@@ -31,7 +31,7 @@
 		        <a class="nav-link" href="${contextPath}/user/my-tweets">My Tweets</a>
 		      </li>
 		      <li class="nav-item">
-		        <a class="nav-link" href="${contextPath}/user/sendMessage">Send message</a>
+		        <a class="nav-link" href="${contextPath}/user/send-message">Send message</a>
 		      </li>
 		      <li class="nav-item">
 		        <form action="${contextPath}/logout" method="post">

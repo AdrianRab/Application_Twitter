@@ -40,7 +40,7 @@
 								<td>${received.timeSent}</td>
 								<td>${received.title}</td>
 								<td>${received.sender.username}</td>
-								<td><a href="${contextPath}/user/delete/${received.id}"><button>Delete</button></a>	</td>
+								<td><a href="${contextPath}/user/delete-message/${received.id}"><button>Delete</button></a>	</td>
 						</tr>
 							<tr id="receivedContent"> <!-- w JS zrobić by sie rozsuwalo po klknieciu -->
 								<td>${received.content}</td>
@@ -70,7 +70,7 @@
 								<td>${sent.timeSent}</td>
 								<td>${sent.title}</td>
 								<td>${sent.receiver.username}</td>
-								<td><a href="${contextPath}/user/delete/${sent.id}"><button>Delete</button></a>	</td>
+								<td><a href="${contextPath}/user/delete-message/${sent.id}"><button>Delete</button></a>	</td>
 					
 							</tr>
 							<tr id="sentContent"> <!-- w JS zrobić by sie rozsuwalo po klknieciu -->
@@ -78,11 +78,11 @@
 							</tr>
 						</c:forEach>
 					</table>	
-<%-- 				<c:if test="${empty sentMessages || sentMessage == null}">
-					<p>You have not sent any meessages yet.</p>
-				</c:if> --%>
 			</div>
 		</div>
+		<c:if test="${empty sentMessages || sentMessage == null}">
+			<p>You have not sent any meessages yet.</p>
+		</c:if>
 		</c:if>
 		
 			<div class="container">
@@ -91,7 +91,7 @@
 				    </div>
 				   	<div class="col">
 						<div class="btn-group btn-group-lg">
-							<a href="${contextPath}/user/sendMessage"><button class="btn btn-dark">Send message</button></a>
+							<a href="${contextPath}/user/send-message"><button class="btn btn-dark">Send message</button></a>
 							<a href="${contextPath}/user/my-page"><button class="btn btn-dark">Back to profile</button></a>
 							<a href="${contextPath}/tweet/add"><button class="btn btn-dark">Add new tweet.</button></a>
 							<a href="${contextPath}/home"><button class="btn btn-dark">Go to main page.</button></a> 
