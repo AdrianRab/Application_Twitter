@@ -24,6 +24,11 @@
 		<security:authorize access ="hasAnyRole('ADMIN', 'USER')">
 		  <div class="collapse navbar-collapse" id="navbarSupportedContent">
 		    <ul class="navbar-nav mr-auto">
+		    	<security:authorize access ="hasRole('ADMIN')">
+			      <li class="nav-item">
+			        <a class="nav-link" href="${contextPath}/admin/panel">Admin panel</a>
+			      </li>
+			     </security:authorize>
 		      <li class="nav-item">
 		        <a class="nav-link" href="${contextPath}/user/my-page">My profile <span class="sr-only">(current)</span></a>
 		      </li>

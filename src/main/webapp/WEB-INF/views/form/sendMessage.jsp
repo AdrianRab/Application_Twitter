@@ -5,7 +5,12 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
 <title>New message</title>
 </head>
 <body>
@@ -38,20 +43,23 @@
 		<div class="container">
 			<div class="row">
 				<div class="col">
-				  </div>
-				   	<div class="col">
-						<div class="btn-group btn-group-lg">
-							<a href="${contextPath}/user/messages"><button class="btn btn-dark">My messages</button></a>
-							<a href="${contextPath}/user/my-page"><button class="btn btn-dark">Back to profile</button></a>
-							<a href="${contextPath}/tweet/add"><button class="btn btn-dark">Add new tweet.</button></a>
-							<a href="${contextPath}/home"><button class="btn btn-dark">Go to main page.</button></a> 
-						</div>	   		
-				    </div>
-				  <div class="col">
+				</div>
+				<div class="col">
+					<div class="btn-group btn-group-lg">
+						<a href="${contextPath}/user/messages"><button class="btn btn-dark">My messages</button></a>
+						<a href="${contextPath}/user/my-page"><button class="btn btn-dark">Back to profile</button></a>
+						<a href="${contextPath}/tweet/add"><button class="btn btn-dark">Add new tweet.</button></a>
+						<a href="${contextPath}/home"><button class="btn btn-dark">Go to main page.</button></a> 
+					</div>	   		
+				</div>
+				<div class="col">
 				</div>
 			</div>
 		</div>
-	
+		<br>
+		<br>
+		<br>
+		<br>
 		<%@ include file="../footer.jsp"%>
 	</div>
 </body>

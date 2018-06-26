@@ -62,18 +62,21 @@ public class UserController {
 		}
 	}
 
-	@GetMapping("/delete-user/{id}")
-	public ModelAndView removeUser(@PathVariable long id) {
-		ModelAndView mav = new ModelAndView();
-		userRepository.delete(id);
-		mav.setViewName("redirect:http://localhost:8080/Application_Twitter/home");
-		return mav;
-	}
+
 	
 	@GetMapping("/my-page")
 	public ModelAndView userProfile(@AuthenticationPrincipal UserDetails currentUser) {
 		ModelAndView mav = new ModelAndView();
 		mav.addObject("user", userRepository.findByEmailIgnoreCase(currentUser.getUsername()));
+		mav.setViewName("/userProfile");
+		return mav;
+	}
+	
+	@GetMapping("/my-page/{id}")
+	public ModelAndView userProfile(@PathVariable long id) {
+		ModelAndView mav = new ModelAndView();
+		mav.addObject("user", userRepository.findOne(id));
+		mav.addObject("adminMode", true);
 		mav.setViewName("/userProfile");
 		return mav;
 	}

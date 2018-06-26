@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -61,7 +62,7 @@ public class AdminController {
 				userRoleRepository.saveAndFlush(userRole);
 				userRepository.saveAndFlush(user);
 				mav.addObject("user", user);
-				mav.setViewName("/userProfile");
+				mav.setViewName("adminPanel");
 				return mav;
 			} else {
 				mav.setViewName("form/addAdmin");
@@ -77,19 +78,51 @@ public class AdminController {
 		return mav;
 	}
 	
-	//ogarn pozniej
-//	@GetMapping("/rights/{id}")
-//	private ModelAndView addAdminRights(@PathVariable long id) {
-//		ModelAndView mav = new ModelAndView();
-//		User user = userRepository.findOne(id);
-//		UserRole role = userRoleRepository.findOne(user.getRole().getId());
-//		role.setRole("ROLE_ADMIN");
-//		userRoleRepository.saveAndFlush(role);
-//		user.setRole(role);
-//		userRepository.saveAndFlush(user);
-//		mav.setViewName("redirect:http://localhost:8080/Application_Twitter/admin/panel");
-//		return mav;
-//	}
+	@GetMapping("/edit-user/{id}")
+	public ModelAndView editUserForm(@PathVariable long id) {
+		ModelAndView mav = new ModelAndView();
+		User user = userRepository.findOne(id);
+		mav.addObject("user", user);
+		mav.setViewName("form/editUser");
+		return mav;
+	}
+
+	@PostMapping("/edit-user/{id}")
+	public ModelAndView editUser(@Valid User user, BindingResult result) {
+		ModelAndView mav = new ModelAndView();
+		if (!result.hasErrors()) {
+			userRepository.saveAndFlush(user);
+			mav.addObject("user", user);
+			mav.setViewName("/userProfile");
+			return mav;
+		} else {
+			mav.setViewName("form/editUser");
+			return mav;
+		}
+	}
+	
+	
+	@GetMapping("/delete-user/{id}")
+	public ModelAndView removeUser(@PathVariable long id) {
+		ModelAndView mav = new ModelAndView();
+		userRepository.delete(id);
+		mav.setViewName("redirect:http://localhost:8080/Application_Twitter/admin/panel");
+		return mav;
+	}
+	
+	
+	@GetMapping("/rights/{id}")
+	private ModelAndView addAdminRights(@PathVariable long id) {
+		ModelAndView mav = new ModelAndView();
+		User user = userRepository.findOne(id);
+		UserRole role = userRoleRepository.findOne(user.getRole().getId());
+		role.setRole("ROLE_ADMIN");
+		userRoleRepository.saveAndFlush(role);
+		user.setRole(role);
+		userRepository.saveAndFlush(user);
+		mav.setViewName("redirect:http://localhost:8080/Application_Twitter/admin/panel");
+		return mav;
+	}
 	
 	
 	@ModelAttribute("allUsers")

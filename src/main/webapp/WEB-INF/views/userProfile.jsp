@@ -21,17 +21,23 @@
 	<div class="container">
 		<div class="row">
 			<div class="col">
-				<c:if test="${user.role == ADMIN_ROLE}">
-					<p>You are logged as admin.</p>
+				<c:if test="${adminMode==true}">
+					<security:authorize access ="hasRole('ADMIN')">
+						<p class="h2 text-muted">You are logged as admin.</p>
+					</security:authorize>
 				</c:if>
 			</div>
 		</div>
 	</div>
+	<br>
+	<br>
 	<c:set var="contextPath" value="${pageContext.request.contextPath}"/>
 	<div class="container">
 		<div class="row">
 			<div class="col">
-				<p class="h2 text-muted">Welcome ${user.username}!</p>
+				<c:if test="${adminMode==false || adminMode==null}">
+					<p class="h2 text-muted">Welcome ${user.username}!</p>
+				</c:if>
 			</div>
 		</div>
 	</div>

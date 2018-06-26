@@ -9,17 +9,13 @@
 <title>Admin</title>
 </head>
 <body>
-	<div  style="background-color: hsl(150, 100%, 65%)"><%@ include file="header.jsp"%></div>
+<div class="container-fluid bg">
+	<%@ include file="header.jsp"%>
 	
 	
 	<c:set var="contextPath" value="${pageContext.request.contextPath}"/>
 	
-<%-- 	<c:choose>
-		<c:when test="${pageContext.request.userPrincipal.authenticated}">Show something</c:when>
-		<c:otherwise>Show something else</c:otherwise>
-	</c:choose> --%>
-	
-	<table border=1>
+	<table class="table">
 	<tr>
 		<th>Username</th>
 		<th>E-mail</th>
@@ -27,21 +23,38 @@
 		<th>Profile</th>
 		<th>Action</th>
 	</tr>
-		<c:forEach items="allUsers" var="user">
+		<c:forEach items="${allUsers}" var="user">
 		<tr>
 			<td>${user.username}</td>
 			<td>${user.email}</td>
 			<td>${user.created}</td>
-			<td><a href="${contextPath}/user/my-page/${user.id}"><button>Details</button></a></td>
-			<td><a href="${contextPath}/admin/rights/${user.id}"><button>Add admin rights</button></a></td>
-			<td><a href="${contextPath}/user/edit-user/${user.id}"><button>Edit</button></a></td>
-			<td><a href="${contextPath}/user/detele-user/${user.id}"><button>Delete</button></a></td>
+			<td><a href="${contextPath}/user/my-page/${user.id}"><button class="btn btn-info">Details</button></a></td>
+			<td><a href="${contextPath}/admin/rights/${user.id}"><button class="btn btn-info">Add admin rights</button></a></td>
+			<td><a href="${contextPath}/admin/edit-user/${user.id}"><button class="btn btn-warning">Edit</button></a></td>
+			<td><a href="${contextPath}/admin/delete-user/${user.id}"><button class="btn btn-danger">Delete</button></a></td>
 		</tr>	
 		</c:forEach>
 	</table>
 	
-	<a href="${contextPath}/home"><button>Home</button></a>
+	<div class="container">
+		<div class="row">
+			<div class="col">
+			</div>
+			<div class="col">
+			<div class="btn-group btn-group-lg">
+				<a href="${contextPath}/admin/add"><button class="btn btn-dark">Add new admin</button></a>
+				<a href="${contextPath}/user/send-message"><button class="btn btn-dark">Send message</button></a>
+				<a href="${contextPath}/user/my-page"><button class="btn btn-dark">Back to profile</button></a>
+				<a href="${contextPath}/tweet/add"><button class="btn btn-dark">Add new tweet.</button></a>
+				<a href="${contextPath}/home"><button class="btn btn-dark">Go to main page.</button></a> 
+			</div>	   		
+			</div>
+			<div class="col">
+			</div>
+		</div>
+	</div>
 	
-	<div  style="background-color: hsl(150, 100%, 65%)"><%@ include file="footer.jsp"%></div> 
+	<%@ include file="footer.jsp"%>
+</div>
 </body>
 </html>
