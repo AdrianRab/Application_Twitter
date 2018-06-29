@@ -15,7 +15,7 @@
 <title></title>
 </head>
 <body>
-	<div class="container-fluid bg">
+	<div class="container-fluid">
 		<a href="https://github.com/AdrianRab" class="btn btn-block btn-social btn-github">
 			<button style="font-size:24px">Author <i class="fa fa-github"></i></button>
 		</a>

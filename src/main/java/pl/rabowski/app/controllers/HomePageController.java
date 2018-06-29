@@ -33,8 +33,8 @@ public class HomePageController {
 	
 	@Autowired
 	UserRoleRepository userRoleRepository;
-	
 
+	
 	@GetMapping(value = { "/", "/home", "/twitter" })
 	public ModelAndView homePage(@AuthenticationPrincipal UserDetails currentUser) {
 		ModelAndView mav = new ModelAndView();
@@ -91,7 +91,7 @@ public class HomePageController {
 	@GetMapping("/login")
 	public ModelAndView loginPage() {
 		ModelAndView mav = new ModelAndView();
-		mav.setViewName("form/login");
+		mav.setViewName("form/loginPage");
 		return mav;
 	}
 
@@ -104,7 +104,7 @@ public class HomePageController {
 			mav.setViewName("userProfile");
 			return mav;
 		}
-		mav.setViewName("form/login");
+		mav.setViewName("form/loginPage");
 		return mav;
 
 	}

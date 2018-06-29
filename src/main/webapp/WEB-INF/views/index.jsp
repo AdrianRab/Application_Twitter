@@ -13,6 +13,41 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+<style>
+.bg {
+    background-image: url("resources/rawpixel-600782-unsplash.jpg");
+
+    height: 100%; 
+
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.container {
+    padding: 16px;
+}
+
+span.psw {
+    float: right;
+    padding-top: 16px;
+}
+
+@media screen and (max-width: 300px) {
+    span.psw {
+       display: block;
+       float: none;
+    }
+}
+.custom {
+    width: 78px !important;
+}
+body, html {
+    height: 100%;
+    margin: 0;
+}
+</style>
+
 <title>Home page</title>
 </head>
 <body>
@@ -23,10 +58,14 @@
 		<%@ include file="header.jsp"%>
 		<div class="container">
 			<div class="row">
+			</div>
+			<div class="row">
+			</div>
+			<div class="row">
 				<div class="col">
 				 </div>
 				<div class="col">
-					<p class="h1 text-muted">Twitter application.</p>
+					<p class="bg-dark h1 text-white">Twitter</p>
 				 </div>	
 				 <div class="col">
 				 </div>
@@ -44,7 +83,7 @@
 		<security:authorize access="hasAnyRole('ROLE_ADMIN', 'ROLE_USER')">
 			<h2>Recent tweets:</h2>
 			
-			<table class="table">
+			<table class="table table-hover" style="background-color: white">
 				<thead class="thead-dark">
 					<tr>
 						<th>Date</th>
@@ -60,8 +99,8 @@
 						<td>${tweet.user.username}</td>
 						<c:set var="shortDesc" value="${fn:substring(tweet.text, 0, 200)}" />
 						<td>${shortDesc}</td>
-						<td><a href="${contextPath}/tweet/details/${tweet.id}"><button>Details</button></a><br></td>
-						<td><a href="${contextPath}/tweet/add-comment/${tweet.id}"><button>Comment</button></a><br></td>
+						<td><a href="${contextPath}/tweet/details/${tweet.id}"><button class="btn btn-warning">Details</button></a><br></td>
+						<td><a href="${contextPath}/tweet/add-comment/${tweet.id}"><button class="btn btn-warning">Comment</button></a><br></td>
 					</tr>
 				</c:forEach>
 			</table>
@@ -84,7 +123,7 @@
 									<td><a href="${contextPath}/login"><button button class="btn btn-warning">Login to add new Tweet.</button> </a></td>
 								</tr>
 								<tr>
-									<td><p class="h5 text-muted">Does not have  account? <a href="${contextPath}/register-user"><button button class="btn btn-success">Register.</button></a></p></td>
+									<td><p class="bg-dark h5 text-white">Does not have  account? <a href="${contextPath}/register-user"><button button class="btn btn-success">Register.</button></a></p></td>
 								</tr>
 							</table>
 						</security:authorize> 
