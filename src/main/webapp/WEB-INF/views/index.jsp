@@ -123,7 +123,7 @@ body, html {
 									<td><a href="${contextPath}/login"><button button class="btn btn-warning">Login to add new Tweet.</button> </a></td>
 								</tr>
 								<tr>
-									<td><p class="bg-dark h5 text-white">Does not have  account? <a href="${contextPath}/register-user"><button button class="btn btn-success">Register.</button></a></p></td>
+									<td><p class="h5 text-muted">Does not have  account? <a href="${contextPath}/register-user"><button button class="btn btn-success">Register.</button></a></p></td>
 								</tr>
 							</table>
 						</security:authorize> 
