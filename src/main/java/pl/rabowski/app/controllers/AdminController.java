@@ -19,6 +19,7 @@ import pl.rabowski.app.entities.User;
 import pl.rabowski.app.entities.UserRole;
 import pl.rabowski.app.repositories.UserRepository;
 import pl.rabowski.app.repositories.UserRoleRepository;
+import pl.rabowski.app.service.AdminServiceImpl;
 
 @Controller
 @RequestMapping("/admin")
@@ -29,6 +30,9 @@ public class AdminController {
 	
 	@Autowired
 	UserRoleRepository userRoleRepository;
+	
+	@Autowired
+	AdminServiceImpl adminService; 
 	
 	@GetMapping("/add")
 	private ModelAndView addAdmin() {
@@ -114,12 +118,7 @@ public class AdminController {
 	@GetMapping("/rights/{id}")
 	private ModelAndView addAdminRights(@PathVariable long id) {
 		ModelAndView mav = new ModelAndView();
-		User user = userRepository.findOne(id);
-		UserRole role = userRoleRepository.findOne(user.getRole().getId());
-		role.setRole("ROLE_ADMIN");
-		userRoleRepository.saveAndFlush(role);
-		user.setRole(role);
-		userRepository.saveAndFlush(user);
+		adminService.addAdminRights(id);
 		mav.setViewName("redirect:http://localhost:8080/Application_Twitter/admin/panel");
 		return mav;
 	}
@@ -127,12 +126,7 @@ public class AdminController {
 	@GetMapping("/remove-rights/{id}")
 	private ModelAndView removeAdminRights(@PathVariable long id) {
 		ModelAndView mav = new ModelAndView();
-		User user = userRepository.findOne(id);
-		UserRole role = userRoleRepository.findOne(user.getRole().getId());
-		role.setRole("ROLE_USER");
-		userRoleRepository.saveAndFlush(role);
-		user.setRole(role);
-		userRepository.saveAndFlush(user);
+		adminService.removeAdminRights(id);
 		mav.setViewName("redirect:http://localhost:8080/Application_Twitter/admin/panel");
 		return mav;
 	}

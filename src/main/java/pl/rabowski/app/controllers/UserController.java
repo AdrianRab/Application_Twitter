@@ -62,8 +62,6 @@ public class UserController {
 		}
 	}
 
-
-	
 	@GetMapping("/my-page")
 	public ModelAndView userProfile(@AuthenticationPrincipal UserDetails currentUser) {
 		ModelAndView mav = new ModelAndView();
