@@ -124,6 +124,19 @@ public class AdminController {
 		return mav;
 	}
 	
+	@GetMapping("/remove-rights/{id}")
+	private ModelAndView removeAdminRights(@PathVariable long id) {
+		ModelAndView mav = new ModelAndView();
+		User user = userRepository.findOne(id);
+		UserRole role = userRoleRepository.findOne(user.getRole().getId());
+		role.setRole("ROLE_USER");
+		userRoleRepository.saveAndFlush(role);
+		user.setRole(role);
+		userRepository.saveAndFlush(user);
+		mav.setViewName("redirect:http://localhost:8080/Application_Twitter/admin/panel");
+		return mav;
+	}
+	
 	
 	@ModelAttribute("allUsers")
 	public List<User> getAllTweets() {

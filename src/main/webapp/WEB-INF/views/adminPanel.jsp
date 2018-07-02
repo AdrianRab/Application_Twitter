@@ -29,7 +29,12 @@
 			<td>${user.email}</td>
 			<td>${user.created}</td>
 			<td><a href="${contextPath}/user/my-page/${user.id}"><button class="btn btn-info">Details</button></a></td>
-			<td><a href="${contextPath}/admin/rights/${user.id}"><button class="btn btn-info">Add admin rights</button></a></td>
+			<c:if test="${user.role.role == 'ROLE_USER'}">
+				<td><a href="${contextPath}/admin/rights/${user.id}"><button class="btn btn-info">Add admin rights</button></a></td>
+			</c:if>
+			<c:if test="${user.role.role == 'ROLE_ADMIN'}" >
+				<td><a href="${contextPath}/admin/remove-rights/${user.id}"><button class="btn btn-info">Remove admin rights</button></a></td>
+			</c:if>
 			<td><a href="${contextPath}/admin/edit-user/${user.id}"><button class="btn btn-warning">Edit</button></a></td>
 			<td><a href="${contextPath}/admin/delete-user/${user.id}"><button class="btn btn-danger">Delete</button></a></td>
 		</tr>	
